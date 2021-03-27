@@ -142,4 +142,22 @@ export default class TownsServiceClient {
     return TownsServiceClient.unwrapOrThrowError(responseWrapper);
   }
 
+  async getUserInfo(): Promise<string> {
+    const resp = await this._axios.post('/graphql', {
+      query: `
+        query {
+          getAllUsers {
+            firstName
+            lastName
+          }
+        }
+      `
+    });
+
+    const fName = resp.data.data.getAllUsers[0].firstName.toString();
+    const lName = resp.data.data.getAllUsers[0].lastName.toString();
+
+    return `${fName} ${lName}`;
+  }
+
 }
