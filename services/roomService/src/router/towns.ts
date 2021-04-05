@@ -12,6 +12,9 @@ import {
 } from '../requestHandlers/CoveyTownRequestHandlers';
 import { logError } from '../Utils';
 
+import db from 'huncwot/db';
+
+
 export default function addTownRoutes(http: Server, app: Express): io.Server {
   /*
    * Create a new session (aka join a town)
@@ -58,6 +61,31 @@ export default function addTownRoutes(http: Server, app: Express): io.Server {
    */
   app.get('/towns', BodyParser.json(), async (_req, res) => {
     try {
+
+      // Select
+      let sql = { text:"Select * from Event", values:[] };
+
+      // Select Where
+      let sql1 = { text:"Select id, name from Event", values:[] };
+
+      // Insert
+      let sql2 = { text:"Insert into Event (name) Values ('Dummy'), ('Dummie')", values:[]};
+
+      // Update
+      let sql3 = { text:"Update Event set name='Akshaye xxxx' where id=1", values:[] };
+
+      // Sort
+      let sql4 = { text:"Select * from Event Order By id DESC", values:[] };  
+
+      // Insert/Update
+      //const temp = await db.execute(sql2);
+      //console.log("Insert/Update: " + temp)
+
+      // Get
+      const collection1 = await db.execute(sql);
+      console.log("GET: \n" + collection1);
+      //return OK(collection1);
+
       const result = await townListHandler();
       res.status(StatusCodes.OK)
         .json(result);
