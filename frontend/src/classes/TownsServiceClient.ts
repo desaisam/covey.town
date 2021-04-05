@@ -153,4 +153,12 @@ export default class TownsServiceClient {
     return TownsServiceClient.unwrapOrThrowError(responseWrapper);
   }
 
+  async handleSignInSubmit(requestData: UserSignInRequest): Promise<void> {
+    const responseWrapper = await this._axios.post('/dummy', requestData);
+  }
+
+  async handleSignUpSubmit(requestData: UserSignUpRequest): Promise<void> {
+    const responseWrapper = await this._axios.post('/dummmy', requestData);
+  }
+
 }
