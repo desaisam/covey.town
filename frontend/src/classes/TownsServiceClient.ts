@@ -92,6 +92,22 @@ export type CoveyTownInfo = {
   maximumOccupancy: number
 };
 
+export interface UserLoginRequest {
+  userName: string;
+  password: string;
+}
+
+export interface UserSignInRequest {
+  email: string;
+  password: string;
+}
+
+export interface UserSignUpRequest {
+  name: string;
+  email: string;
+  password: string;
+}
+
 export default class TownsServiceClient {
   private _axios: AxiosInstance;
 

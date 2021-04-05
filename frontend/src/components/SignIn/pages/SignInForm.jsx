@@ -70,7 +70,7 @@ export default function SignIn() {
             <Link to='/'>
               <Button variantColor='teal' variant='outline' width='full' mt={4} type='submit'>
                 {isLoading ? <CircularProgress isIndeterminate size='24px' color='teal' /> : 'Back'}
-              </Button>
+              </Button> 
             </Link>
           </form>
         </Box>
