@@ -147,17 +147,23 @@ export default class TownsServiceClient {
       query: `
         query {
           getAllUsers {
-            firstName
-            lastName
+            id
+            email
+            name
+            password
+            avatar
           }
         }
       `
     });
 
-    const fName = resp.data.data.getAllUsers[0].firstName.toString();
-    const lName = resp.data.data.getAllUsers[0].lastName.toString();
+    const id = resp.data.data.getAllUsers[0].id.toString();
+    const email = resp.data.data.getAllUsers[0].email.toString();
+    const name = resp.data.data.getAllUsers[0].name.toString();
+    const password = resp.data.data.getAllUsers[0].password.toString();
+    const avatar = resp.data.data.getAllUsers[0].avatar.toString();
 
-    return `${fName} ${lName}`;
+    return `id: ${ id }, email: ${ email }, name: ${ name }, password: ${ password }, avatar: ${ avatar }`;
   }
 
 }
