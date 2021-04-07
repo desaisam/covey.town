@@ -24,7 +24,7 @@ export default function SignUp() {
     event.preventDefault();
     setIsLoading(true);
     try {
-      await userLogin({ email, password });
+      await userLogin({ name, email, password });
       setIsLoading(false);
     } catch (e) {
       setError('Unable to Sign Up');
