@@ -295,11 +295,10 @@ export default function AppStateWrapper(): JSX.Element {
         <MuiThemeProvider theme={theme('rgb(185, 37, 0)')}>
           <AppStateProvider preferredMode='fullwidth' highlightedProfiles={[]}>
             <Route exact path='/signin'>
-              {' '}
               <SignIn />
             </Route>
             <Route exact path='/signup'>
-              <SignUp />{' '}
+              <SignUp />
             </Route>
             <Route exact path='/'>
               <EmbeddedTwilioAppWrapper />

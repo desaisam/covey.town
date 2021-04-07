@@ -25,12 +25,20 @@ export default function SignIn() {
     const result = await userSignIn({ email, password });
     if (result === true) {
       history.replace('/');
+      toast({
+        title: `Welcome ${email}`,
+        description: 'Welcome to your profile',
+        status: 'success',
+        duration: 9000,
+        isClosable: true,
+      });
     } else {
       alert('Invalid Credentials');
       toast({
         title: 'Invalid Credentials',
         description: 'Check the Username and the Password',
         status: 'error',
+        duration: 9000,
         isClosable: true,
       });
     }
