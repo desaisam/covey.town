@@ -15,8 +15,10 @@ import {
   useColorModeValue,
   Stack,
 } from '@chakra-ui/react';
-import { HamburgerIcon, CloseIcon } from '@chakra-ui/icons';
+import { HamburgerIcon, CloseIcon, ChevronDownIcon } from '@chakra-ui/icons';
 import { useHistory } from 'react-router-dom';
+import { Image } from '@chakra-ui/core';
+import ChangeAvatar from './ChangeAvatarMenu'
 
 export default function NavBar() {
   const { isOpen, onOpen, onClose } = useDisclosure();
@@ -39,8 +41,9 @@ export default function NavBar() {
             <HStack as='nav' spacing={4} display={{ base: 'none', md: 'flex' }} />
           </HStack>
           <Flex alignItems='center'>
+            <ChangeAvatar/>
             <Button onClick={onClickSignIn} variant='solid' colorScheme='teal' size='sm' mr={4}>
-              Sign In
+              Sign In 
             </Button>
             <Button onClick={onClickSignUp} variant='solid' colorScheme='teal' size='sm' mr={4}>
               Sign Up

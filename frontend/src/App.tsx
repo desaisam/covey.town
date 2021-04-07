@@ -210,7 +210,7 @@ async function GameController(
     socket.emit('playerMovement', location);
     dispatchAppUpdate({ action: 'weMoved', location });
   };
-
+ 
   dispatchAppUpdate({
     action: 'doConnect',
     data: {
