@@ -40,10 +40,10 @@ export default function NavBar() {
           </HStack>
           <Flex alignItems='center'>
             <Button onClick={onClickSignIn} variant='solid' colorScheme='teal' size='sm' mr={4}>
-              Sign In
+              Log In
             </Button>
             <Button onClick={onClickSignUp} variant='solid' colorScheme='teal' size='sm' mr={4}>
-              Sign Up
+              Register
             </Button>
             <Menu>
               <MenuButton as={Button} rounded='full' variant='link' cursor='pointer'>
