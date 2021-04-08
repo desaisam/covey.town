@@ -176,13 +176,36 @@ export default class TownsServiceClient {
 
     return `id: ${ id }, email: ${ email }, name: ${ name }, password: ${ password }, avatar: ${ avatar }`;
   }
-  
-  async handleSignInSubmit(requestData: UserSignInRequest): Promise<void> {
-    const responseWrapper = await this._axios.post('/dummy', requestData);
+
+  async handleLoginSubmit(requestData: UserSignInRequest): Promise<void> {
+    const resp = await this._axios.post('/graphql', {
+        query: `
+          query {
+            signUp {
+              email
+              name
+              password
+              avatar
+            }
+          }
+        `
+    });
   }
 
-  async handleSignUpSubmit(requestData: UserSignUpRequest): Promise<void> {
-    const responseWrapper = await this._axios.post('/dummmy', requestData);
+  async handleRegisterSubmit(requestData: UserSignUpRequest): Promise<void> {
+    const query = `
+      mutation {
+        registerUser(name: "${ requestData.name }", email: "${ requestData.email }", password: "${ requestData.password }") {
+          isSuccess,
+          message
+        }
+      }
+    `;
+
+    const response = await this._axios.post('/graphql', { query });
+
+    console.log(response.data.data.registerUser.isSuccess);
+    console.log(response.data.data.registerUser.message); 
   }
 
 }

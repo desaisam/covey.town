@@ -2,18 +2,8 @@ import { GraphQLObjectType, GraphQLSchema, GraphQLInt, GraphQLString, GraphQLLis
 import { UserType } from './typedefs/UserType';
 import { pool } from './postgres/db'
 import {nanoid} from 'nanoid';
+import { RegisterResponseType } from './typedefs/RegisterResponseType';
 
-
-// some random data
-// const userData = [
-//     {
-//         'id': 1,
-//         'firstName': 'preet',
-//         'lastName': 'shah',
-//         'email': 'test@test.com',
-//         'password': '12345'
-//     },
-// ]
 
 const RootQuery = new GraphQLObjectType({
   name: "RootQueryType",
@@ -42,25 +32,52 @@ const RootQuery = new GraphQLObjectType({
   },
 });
 
+async function checkIfUserAlreadyExists(email: string): Promise<boolean> {
+  const response = await pool.query('SELECT * FROM userdata');
+  const data = response.rows;
+  const userFound = data.find(user => user.email === email);
+  if (userFound) {
+    return true;
+  }
+  return false;
+}
+
 const Mutation = new GraphQLObjectType({
   name: "Mutation",
   fields: {
-    createUser: {
-      type: UserType,
+    registerUser: {
+      type: RegisterResponseType,
       args: {
+        name: { type: GraphQLString },
         email: { type: GraphQLString },
         password: { type: GraphQLString },
       },
-      resolve() {
-        console.log('inside mutation query - remove this once implemented');
-        // userData.push({
-        //   id: userData.length + 1,
-        //   firstName: args.firstName,
-        //   lastName: args.lastName,
-        //   email: args.email,
-        //   password: args.password,
-        // });
-        // return args;
+      async resolve(parent, args) {
+        try {
+          const nousage = parent;
+          // First check if user already registered
+          const userExists = await checkIfUserAlreadyExists(args.email);
+          if (userExists) {
+            return {
+              isSuccess: false,
+              message: 'User already registered with this email. Please Login instead.'
+            }
+          }
+
+          // Put this data in args to database
+          await pool.query(`INSERT INTO userdata (email, name, password, avatar) VALUES ($1, $2, $3, $4)`, [args.email, args.name, args.password, 'avatar-1']);
+          return {
+            isSuccess: true,
+            message: 'Successfully registered!'
+          }
+        } catch (e) {
+          // Log error and return 'false' isSuccess with error message
+          console.log(`Error in adding user to database. ${ e }`);
+          return {
+            isSuccess: false,
+            message: 'Something went wrong. Please try again :('
+          }
+        }
       },
     },
   },
