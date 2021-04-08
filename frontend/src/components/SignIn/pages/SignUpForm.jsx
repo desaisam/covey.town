@@ -12,7 +12,6 @@ import {
 
 import { Link } from 'react-router-dom';
 import ErrorMessage from '../ErrorMessage';
-import userLogin from '../mockApi';
 import TownsServiceClient from '../../../classes/TownsServiceClient';
 
 export default function SignUp() {
@@ -27,7 +26,6 @@ export default function SignUp() {
     event.preventDefault();
     setIsLoading(true);
     try {
-      console.log('calling register event now...');
       await apiClient.handleRegisterSubmit({ name, email, password });
       setIsLoading(false);
     } catch (e) {

@@ -3,6 +3,7 @@ import { UserType } from './typedefs/UserType';
 import { pool } from './postgres/db'
 import {nanoid} from 'nanoid';
 import { RegisterResponseType } from './typedefs/RegisterResponseType';
+import { LoginResponseType } from './typedefs/LoginResponseType';
 
 
 const RootQuery = new GraphQLObjectType({
@@ -42,6 +43,13 @@ async function checkIfUserAlreadyExists(email: string): Promise<boolean> {
   return false;
 }
 
+async function getExistingUser(email: string, password: string): Promise<any> {
+  const response = await pool.query('SELECT * FROM userdata');
+  const data = response.rows;
+  const user = data.find(user => (user.email === email && user.password === password));
+  return user;
+}
+
 const Mutation = new GraphQLObjectType({
   name: "Mutation",
   fields: {
@@ -68,11 +76,49 @@ const Mutation = new GraphQLObjectType({
           await pool.query(`INSERT INTO userdata (email, name, password, avatar) VALUES ($1, $2, $3, $4)`, [args.email, args.name, args.password, 'avatar-1']);
           return {
             isSuccess: true,
-            message: 'Successfully registered!'
+            message: 'Successfully registered!',
+            name: args.name,
+            email: args.email,
+            avatar: 'avatar-1',
           }
         } catch (e) {
           // Log error and return 'false' isSuccess with error message
-          console.log(`Error in adding user to database. ${ e }`);
+          console.log(`Error in adding user: ${ args.email } to database. ${ e }`);
+          return {
+            isSuccess: false,
+            message: 'Something went wrong. Please try again :('
+          }
+        }
+      },
+    },
+    loginUser: {
+      type: LoginResponseType,
+      args: {
+        email: { type: GraphQLString },
+        password: { type: GraphQLString },
+      },
+      async resolve(parent, args) {
+        try {
+          const nousage = parent;
+          // First check if user registered or not
+          const user = await getExistingUser(args.email, args.password);
+          if (user === undefined) {
+            return {
+              isSuccess: false,
+              message: 'User cannot be logged in. Please verify your credentials.'
+            }
+          }
+
+          return {
+            isSuccess: true,
+            message: 'Successfully logged-in!',
+            name: user.name,
+            email: user.email,
+            avatar: user.avatar,
+          }
+        } catch (e) {
+          // Log error and return 'false' isSuccess with error message
+          console.log(`Error in checking existing user: ${ args.email } in database. ${ e }`);
           return {
             isSuccess: false,
             message: 'Something went wrong. Please try again :('

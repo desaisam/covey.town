@@ -11,7 +11,7 @@ import {
   CircularProgress,
 } from '@chakra-ui/core';
 
-import userLogin from '../mockApi';
+import TownsServiceClient from '../../../classes/TownsServiceClient';
 import ErrorMessage from '../ErrorMessage';
 
 export default function SignIn() {
@@ -19,11 +19,13 @@ export default function SignIn() {
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
   const [isLoading, setIsLoading] = useState(false);
+  const apiClient = new TownsServiceClient();
+
   const handleSubmit = async event => {
     event.preventDefault();
     setIsLoading(true);
     try {
-      await userLogin({ email, password });
+      await apiClient.handleLoginSubmit({ email, password });
       setIsLoading(false);
     } catch (e) {
       setError('Invalid username or password');

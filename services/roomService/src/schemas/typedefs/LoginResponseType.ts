@@ -5,5 +5,8 @@ export const LoginResponseType = new GraphQLObjectType({
   fields: () => ({
     isSuccess: { type: GraphQLBoolean },
     message: { type: GraphQLString },
+    name: { type: GraphQLString },
+    email: { type: GraphQLString },
+    avatar: { type: GraphQLString },
   }),
 });

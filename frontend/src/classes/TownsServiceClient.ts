@@ -178,18 +178,25 @@ export default class TownsServiceClient {
   }
 
   async handleLoginSubmit(requestData: UserSignInRequest): Promise<void> {
-    const resp = await this._axios.post('/graphql', {
-        query: `
-          query {
-            signUp {
-              email
-              name
-              password
-              avatar
-            }
-          }
-        `
-    });
+    const query = `
+      mutation {
+        loginUser(email: "${ requestData.email }", password: "${ requestData.password }") {
+          isSuccess,
+          message,
+          name,
+          email,
+          avatar
+        }
+      }
+    `;
+
+    const response = await this._axios.post('/graphql', { query });
+
+    console.log(response.data.data.loginUser.isSuccess);
+    console.log(response.data.data.loginUser.message); 
+    console.log(response.data.data.loginUser.name); 
+    console.log(response.data.data.loginUser.email); 
+    console.log(response.data.data.loginUser.avatar); 
   }
 
   async handleRegisterSubmit(requestData: UserSignUpRequest): Promise<void> {
@@ -197,7 +204,10 @@ export default class TownsServiceClient {
       mutation {
         registerUser(name: "${ requestData.name }", email: "${ requestData.email }", password: "${ requestData.password }") {
           isSuccess,
-          message
+          message,
+          name,
+          email,
+          avatar
         }
       }
     `;
@@ -206,6 +216,9 @@ export default class TownsServiceClient {
 
     console.log(response.data.data.registerUser.isSuccess);
     console.log(response.data.data.registerUser.message); 
+    console.log(response.data.data.registerUser.name); 
+    console.log(response.data.data.registerUser.email); 
+    console.log(response.data.data.registerUser.avatar); 
   }
 
 }
