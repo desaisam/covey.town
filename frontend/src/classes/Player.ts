@@ -5,6 +5,10 @@ export default class Player {
 
   private readonly _userName: string;
 
+  private avatars = ['granny', 'cooldude', 'barmaid', 'monk', 'professor'];
+
+  private readonly _avatar: string;
+
   public sprite?: Phaser.GameObjects.Sprite;
 
   public label?: Phaser.GameObjects.Text;
@@ -13,6 +17,7 @@ export default class Player {
     this._id = id;
     this._userName = userName;
     this.location = location;
+    this._avatar = this.avatars[Math.floor(Math.random()*this.avatars.length)];
   }
 
   get userName(): string {
@@ -21,6 +26,10 @@ export default class Player {
 
   get id(): string {
     return this._id;
+  }
+
+  get avatar(): string {
+    return this._avatar;
   }
 
   static fromServerPlayer(playerFromServer: ServerPlayer): Player {

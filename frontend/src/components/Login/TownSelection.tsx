@@ -136,17 +136,6 @@ export default function TownSelection({ doLogin }: TownSelectionProps): JSX.Elem
     }
   };
 
-  const [data, setData] = useState<string>('');
-  useEffect( () => {
-    const getData = async() => {
-      const resp = await apiClient.getUserInfo();
-      console.log(`received response: ${ resp }`);
-      setData(resp);
-    };
-
-    getData();
-  }, [apiClient]);
-
   return (
     <>
       <form>
@@ -220,14 +209,6 @@ export default function TownSelection({ doLogin }: TownSelectionProps): JSX.Elem
                 </Tbody>
               </Table>
             </Box>
-          </Box>
-
-          <Box p="4" borderWidth="1px" borderRadius="lg">
-            <Heading as="h2" size="lg">Username information from database</Heading>
-
-            <FormControl>
-              <FormLabel htmlFor="userInfo">{ data }</FormLabel>
-            </FormControl>
           </Box>
 
         </Stack>

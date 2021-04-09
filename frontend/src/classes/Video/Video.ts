@@ -16,6 +16,8 @@ export default class Video {
 
   private _userName: string;
 
+  private _coveyUserID: string | undefined;
+
   private townsServiceClient: TownsServiceClient = new TownsServiceClient();
 
   private _coveyTownID: string;
@@ -48,6 +50,10 @@ export default class Video {
     return this._userName;
   }
 
+  get coveyUserID(): string | undefined {
+    return this._coveyUserID;
+  }
+
   get coveyTownID(): string {
     return this._coveyTownID;
   }
@@ -65,6 +71,7 @@ export default class Video {
             this.videoToken = result.providerVideoToken;
             this._townFriendlyName = result.friendlyName;
             this._isPubliclyListed = result.isPubliclyListed;
+            this._coveyUserID = result.coveyUserID;
             resolve(result);
           })
           .catch((err) => {

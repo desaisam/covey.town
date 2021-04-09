@@ -153,30 +153,6 @@ export default class TownsServiceClient {
     return TownsServiceClient.unwrapOrThrowError(responseWrapper);
   }
 
-  async getUserInfo(): Promise<string> {
-    const resp = await this._axios.post('/graphql', {
-      query: `
-        query {
-          getAllUsers {
-            id
-            email
-            name
-            password
-            avatar
-          }
-        }
-      `
-    });
-
-    const id = resp.data.data.getAllUsers[0].id.toString();
-    const email = resp.data.data.getAllUsers[0].email.toString();
-    const name = resp.data.data.getAllUsers[0].name.toString();
-    const password = resp.data.data.getAllUsers[0].password.toString();
-    const avatar = resp.data.data.getAllUsers[0].avatar.toString();
-
-    return `id: ${ id }, email: ${ email }, name: ${ name }, password: ${ password }, avatar: ${ avatar }`;
-  }
-
   async handleLoginSubmit(requestData: UserSignInRequest): Promise<void> {
     const query = `
       mutation {
