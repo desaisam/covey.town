@@ -19,11 +19,12 @@ export default function SignIn() {
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
   const [isLoading, setIsLoading] = useState(false);
-
   const history = useHistory();
   const toast = useToast();
+  const apiClient = new TownsServiceClient();
+
   const handleSubmit = async () => {
-    const result = await userSignIn({ email, password });
+    const result = await apiClient.handleLoginSubmit({ email, password });
     if (result === true) {
       history.replace('/');
       toast({
@@ -42,21 +43,7 @@ export default function SignIn() {
         duration: 9000,
         isClosable: true,
       });
-  const apiClient = new TownsServiceClient();
-
-  const handleSubmit = async event => {
-    event.preventDefault();
-    setIsLoading(true);
-    try {
-      await apiClient.handleLoginSubmit({ email, password });
-      setIsLoading(false);
-    } catch (e) {
-      setError('Invalid username or password');
-      setIsLoading(false);
-      setEmail('d');
-      setPassword('');
     }
-    setIsLoading(false);
   };
 
   return (
