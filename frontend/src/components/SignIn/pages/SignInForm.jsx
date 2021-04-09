@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useHistory } from 'react-router-dom';
 import {
   Flex,
   Box,
@@ -10,7 +10,7 @@ import {
   Button,
   CircularProgress,
 } from '@chakra-ui/core';
-
+import { useToast } from '@chakra-ui/react';
 import TownsServiceClient from '../../../classes/TownsServiceClient';
 import ErrorMessage from '../ErrorMessage';
 
@@ -19,6 +19,29 @@ export default function SignIn() {
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
   const [isLoading, setIsLoading] = useState(false);
+
+  const history = useHistory();
+  const toast = useToast();
+  const handleSubmit = async () => {
+    const result = await userSignIn({ email, password });
+    if (result === true) {
+      history.replace('/');
+      toast({
+        title: `Welcome ${email}`,
+        description: 'Welcome to your profile',
+        status: 'success',
+        duration: 9000,
+        isClosable: true,
+      });
+    } else {
+      alert('Invalid Credentials');
+      toast({
+        title: 'Invalid Credentials',
+        description: 'Check the Username and the Password',
+        status: 'error',
+        duration: 9000,
+        isClosable: true,
+      });
   const apiClient = new TownsServiceClient();
 
   const handleSubmit = async event => {
@@ -33,6 +56,7 @@ export default function SignIn() {
       setEmail('d');
       setPassword('');
     }
+    setIsLoading(false);
   };
 
   return (
@@ -71,8 +95,8 @@ export default function SignIn() {
             </Button>
             <Link to='/'>
               <Button variantColor='teal' variant='outline' width='full' mt={4} type='submit'>
-                {isLoading ? <CircularProgress isIndeterminate size='24px' color='teal' /> : 'Back'}
-              </Button> 
+                Back
+              </Button>
             </Link>
           </form>
         </Box>
