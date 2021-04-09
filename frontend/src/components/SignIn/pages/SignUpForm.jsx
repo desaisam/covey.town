@@ -12,7 +12,7 @@ import {
 
 import { Link } from 'react-router-dom';
 import ErrorMessage from '../ErrorMessage';
-import userLogin from '../mockApi';
+import TownsServiceClient from '../../../classes/TownsServiceClient';
 
 export default function SignUp() {
   const [name, setName] = useState('');
@@ -20,11 +20,13 @@ export default function SignUp() {
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
   const [isLoading, setIsLoading] = useState(false);
+  const apiClient = new TownsServiceClient();
+
   const handleSubmit = async event => {
     event.preventDefault();
     setIsLoading(true);
     try {
-      await userLogin({ name, email, password });
+      await apiClient.handleRegisterSubmit({ name, email, password });
       setIsLoading(false);
     } catch (e) {
       setError('Unable to Sign Up');
