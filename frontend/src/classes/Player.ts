@@ -9,7 +9,7 @@ export default class Player {
 
   public label?: Phaser.GameObjects.Text;
 
-  public _avatar: string;
+  private _avatar: string;
 
   constructor(id: string, userName: string, location: UserLocation, avatar: string) {
     this._id = id;
