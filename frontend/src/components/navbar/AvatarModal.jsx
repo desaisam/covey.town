@@ -38,14 +38,13 @@ const onClickYes = value => () => {
 
     }
     
-    
 }
 
   console.log(`You have Selected Outside ${avatar}`)
   return (
     <>
      
-      <Button onClick={onOpen}>{name}</Button>
+      <Button isFullWidth  variant="ghost" onClick={onOpen}>{name}</Button>
 
       <Modal closeOnOverlayClick={false} isOpen={isOpen} onClose={onClose}>
         <ModalOverlay />
