@@ -54,7 +54,7 @@ class CoveyGameScene extends Phaser.Scene {
     // this.load.image("logo", logoImg);
     this.load.image('tiles', '/assets/tilesets/tuxmon-sample-32px-extruded.png');
     this.load.tilemapTiledJSON('map', '/assets/tilemaps/tuxemon-town.json');
-    this.load.atlas('atlas', '/assets/atlas/spritechar.png', '/assets/atlas/spritechar.json');
+    this.load.atlas('atlas', '/assets/atlas/sprite_new.png', '/assets/atlas/sprite_new.json');
   }
 
   updatePlayersLocations(players: Player[]) {
@@ -64,6 +64,9 @@ class CoveyGameScene extends Phaser.Scene {
     }
     players.forEach((p) => {
       this.updatePlayerLocation(p);
+      console.log("updating player anims");
+      
+      // this.updatePlayerAnims(p);
     });
     // Remove disconnected players from board
     const disconnectedPlayers = this.players.filter(
@@ -132,6 +135,59 @@ class CoveyGameScene extends Phaser.Scene {
         sprite.setTexture('atlas', `${player.avatar}_${player.location.rotation}`);
       }
     }
+  }
+ 
+  updatePlayerAnims(player : Player) {
+    const myPlayer = this.players.find((p) => p.id === player.id);
+    if (player.sprite && myPlayer) {
+
+        console.log(`Player ID ${player.id}`);
+        
+        console.log(`Current Player ID ${this.id}`);
+        
+        console.log(`Hello Hello Testing Teting`);
+        
+        const prevVelocity = player.sprite.body.velocity.clone();
+        const speed = 175;
+      
+        const body = player.sprite?.body as Phaser.Physics.Arcade.Body;
+
+      // Stop any previous movement from the last frame
+        body.setVelocity(0);
+
+        const primaryDirection = this.getNewMovementDirection();
+        switch (primaryDirection) {
+          case 'left':
+            body.setVelocityX(-speed);
+            player.sprite?.anims.play(`${player.avatar}_left_walk`, true);
+            break;
+          case 'right':
+            body.setVelocityX(speed);
+            player.sprite?.anims.play(`${player.avatar}_right_walk`, true);
+            break;
+          case 'front':
+            body.setVelocityY(speed);
+            player.sprite?.anims.play(`${player.avatar}_front_walk`, true);
+            break;
+          case 'back':
+            body.setVelocityY(-speed);
+            player.sprite?.anims.play(`${player.avatar}_back_walk`, true);
+            break;
+          default:
+            // Not moving
+            player.sprite?.anims.stop(); 
+            // If we were moving, pick and idle frame to use
+            if (prevVelocity.x < 0) {
+              player.sprite?.setTexture('atlas', `${player.avatar}_left`);
+            } else if (prevVelocity.x > 0) {
+              player.sprite?.setTexture('atlas', `${player.avatar}_right`);
+            } else if (prevVelocity.y < 0) {
+              player.sprite?.setTexture('atlas', `${player.avatar}_back`);
+            } else if (prevVelocity.y > 0) player.sprite?.setTexture('atlas', `${player.avatar}_front`);
+            break;  
+            
+        }
+      }   
   }
 
   getNewMovementDirection() {
@@ -221,6 +277,10 @@ class CoveyGameScene extends Phaser.Scene {
         this.emitMovement(this.lastLocation);
       }
     }
+
+
+    
+    
   }
 
   create() {

@@ -1,3 +1,5 @@
+import Phaser from 'phaser';
+
 export default class Player {
   public location?: UserLocation;
 
@@ -9,7 +11,7 @@ export default class Player {
 
   private readonly _avatar: string;
 
-  public sprite?: Phaser.GameObjects.Sprite;
+  public sprite?: Phaser.Types.Physics.Arcade.SpriteWithDynamicBody;
 
   public label?: Phaser.GameObjects.Text;
 
