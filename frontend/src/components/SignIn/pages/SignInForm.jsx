@@ -24,11 +24,11 @@ export default function SignIn() {
   const apiClient = new TownsServiceClient();
 
   const handleSubmit = async () => {
-    const result = await apiClient.handleLoginSubmit({ email, password });
-    if (result === true) {
+    const response = await apiClient.handleLoginSubmit({ email, password });
+    if (response.data.data.loginUser.isSuccess === true) {
       history.replace('/');
       toast({
-        title: `Welcome ${email}`,
+        title: `Welcome ${response.data.data.loginUser.name}`,
         description: 'Welcome to your profile',
         status: 'success',
         duration: 9000,
