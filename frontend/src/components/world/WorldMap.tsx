@@ -54,7 +54,7 @@ class CoveyGameScene extends Phaser.Scene {
     // this.load.image("logo", logoImg);
     this.load.image('tiles', '/assets/tilesets/tuxmon-sample-32px-extruded.png');
     this.load.tilemapTiledJSON('map', '/assets/tilemaps/tuxemon-town.json');
-    this.load.atlas('atlas', '/assets/atlas/spritechar.png', '/assets/atlas/spritechar.json');
+    this.load.atlas('atlas', '/assets/atlas/sprite_new.png', '/assets/atlas/sprite_new.json');
   }
 
   updatePlayersLocations(players: Player[]) {
