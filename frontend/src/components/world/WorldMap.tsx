@@ -36,15 +36,18 @@ class CoveyGameScene extends Phaser.Scene {
 
   private emitMovement: (loc: UserLocation) => void;
 
-  constructor(video: Video, emitMovement: (loc: UserLocation) => void) {
+  constructor(video: Video, emitMovement: (loc: UserLocation) => void, avatar : string) {
     super('PlayGame');
+    console.log(`Inside COnstructor ${avatar}`);
+    
     this.video = video;
     this.emitMovement = emitMovement;
 
     // assign this player id
     this.id = video.coveyUserID;
     // Get avatar corresponding to this player id, api client call to server
-    this.avatar = 'professor';
+    // this.avatar = 'cooldude';
+    this.avatar = avatar;
   }
 
   preload() {
@@ -443,9 +446,10 @@ class CoveyGameScene extends Phaser.Scene {
 export default function WorldMap(): JSX.Element {
   const video = Video.instance();
   const {
-    emitMovement, players,
+    emitMovement, players, apiClient, myPlayerID
   } = useCoveyAppState();
   const [gameScene, setGameScene] = useState<CoveyGameScene>();
+  const [myavatar, setAvatar] = useState<string>('monk');
   useEffect(() => {
     const config = {
       type: Phaser.AUTO,
@@ -459,10 +463,27 @@ export default function WorldMap(): JSX.Element {
         },
       },
     };
+    
+    console.log("Setting avatar");
+    async function getAvatar() {
+        console.log("Inside Setting avatar"); 
+        console.log(apiClient);
+        
+         const res = await apiClient.getAvatar({userId : myPlayerID});
+         console.log(res);
+         
+         setAvatar(res.avatar);
 
+         console.log(myavatar);
+         
+     }
+     getAvatar();
     const game = new Phaser.Game(config);
     if (video) {
-      const newGameScene = new CoveyGameScene(video, emitMovement);
+
+      const newGameScene = new CoveyGameScene(video, emitMovement, myavatar);
+      console.log(`Setting game scene`)
+
       setGameScene(newGameScene);
       game.scene.add('coveyBoard', newGameScene, true);
       video.pauseGame = () => {
@@ -475,7 +496,7 @@ export default function WorldMap(): JSX.Element {
     return () => {
       game.destroy(true);
     };
-  }, [video, emitMovement]);
+  }, [video, emitMovement, myavatar]);
 
   const deepPlayers = JSON.stringify(players);
   useEffect(() => {

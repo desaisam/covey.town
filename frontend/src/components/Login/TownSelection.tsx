@@ -70,7 +70,7 @@ export default function TownSelection({ doLogin }: TownSelectionProps): JSX.Elem
           title: 'Unable to join town',
           description: 'Please enter a town ID',
           status: 'error',
-        });
+        }); 
         return;
       }
       const initData = await Video.setup(userName, coveyRoomID);
@@ -95,7 +95,7 @@ export default function TownSelection({ doLogin }: TownSelectionProps): JSX.Elem
         title: 'Unable to create town',
         description: 'Please select a username before creating a town',
         status: 'error',
-      });
+      }); 
       return;
     }
     if (!newTownName || newTownName.length === 0) {

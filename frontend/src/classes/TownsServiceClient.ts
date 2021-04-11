@@ -31,6 +31,7 @@ export interface TownJoinResponse {
   friendlyName: string;
   /** Is this a private town? * */
   isPubliclyListed: boolean;
+
 }
 
 /**
@@ -103,6 +104,21 @@ export interface UserSignUpRequest {
   password: string;
 }
 
+// Avatar related changes. Remove after backend implementation 
+
+export interface ChangeAvatarRequest {
+  userId: string;
+  avatar: string;
+}
+
+export interface GetAvatarRequest {
+  userId: string | undefined;
+}
+
+export interface GetAvatarResponse {
+  avatar: string;
+}
+
 export default class TownsServiceClient {
   private _axios: AxiosInstance;
 
@@ -142,7 +158,7 @@ export default class TownsServiceClient {
     const responseWrapper = await this._axios.delete<ResponseEnvelope<void>>(`/towns/${requestData.coveyTownID}/${requestData.coveyTownPassword}`);
     return TownsServiceClient.unwrapOrThrowError(responseWrapper, true);
   }
-
+ 
   async listTowns(): Promise<TownListResponse> {
     const responseWrapper = await this._axios.get<ResponseEnvelope<TownListResponse>>('/towns');
     return TownsServiceClient.unwrapOrThrowError(responseWrapper);
@@ -195,6 +211,25 @@ export default class TownsServiceClient {
     console.log(response.data.data.registerUser.name); 
     console.log(response.data.data.registerUser.email); 
     console.log(response.data.data.registerUser.avatar); 
+
+
   }
 
+  // Change avatar for the user
+  async changeAvatar(requestData: ChangeAvatarRequest): Promise<void> {
+    const responseWrapper = await this._axios.patch<ResponseEnvelope<void>>(`/userId/${requestData.userId}/avatar/${requestData.avatar}`, requestData);
+    return TownsServiceClient.unwrapOrThrowError(responseWrapper, true);
+  }
+
+  // Get avatar for the user
+  async getAvatar(requestData: GetAvatarRequest): Promise<GetAvatarResponse> {
+    console.log("inside get avatar");
+    const responseWrapper = await this._axios.get<ResponseEnvelope<TownListResponse>>('/towns');
+
+    // const responseWrapper = await this._axios.get<ResponseEnvelope<GetAvatarResponse>>(`/userId/${requestData.userId}/avatar`);
+    // return TownsServiceClient.unwrapOrThrowError(responseWrapper, true);
+    console.log("returning ");
+
+    return ({ avatar: 'granny' });
+  }
 }

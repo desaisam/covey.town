@@ -39,7 +39,7 @@ return (
             alt="Fluffybuns the destroyer"
             mr="12px"
           />
-          <AvatarModal name = "CoolDude" selection ="CoolDude.png" />
+          <AvatarModal name = "CoolDude" selection ="cooldude" />
         </MenuItem>
         <MenuItem minH="40px">
           <Image
@@ -49,7 +49,7 @@ return (
             alt="Simon the pensive"
             mr="12px"
           />
-          <AvatarModal name = "Barmaid" selection ="Barmaid.png"/>
+          <AvatarModal name = "Barmaid" selection ="barmaid"/>
           {/* <span>Simon the pensive</span> */}
         </MenuItem>
         <MenuItem minH="40px">
@@ -60,7 +60,7 @@ return (
             alt="Simon the pensive"
             mr="12px"
           />
-          <AvatarModal name = "Warrior" selection ="Warrior.png"/>
+          <AvatarModal name = "Monk" selection ="monk"/>
         </MenuItem>
         
       </MenuList>
