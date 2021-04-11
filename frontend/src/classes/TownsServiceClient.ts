@@ -106,13 +106,13 @@ export interface UserSignUpRequest {
 
 // Avatar related changes. Remove after backend implementation 
 
-export interface ChangeAvatarRequest {
-  userId: string;
+export interface SetAvatarRequest {
+  email: string;
   avatar: string;
 }
 
 export interface GetAvatarRequest {
-  userId: string | undefined;
+  email: string | undefined;
 }
 
 export interface GetAvatarResponse {
@@ -211,25 +211,43 @@ export default class TownsServiceClient {
     console.log(response.data.data.registerUser.name); 
     console.log(response.data.data.registerUser.email); 
     console.log(response.data.data.registerUser.avatar); 
-
-
   }
 
-  // Change avatar for the user
-  async changeAvatar(requestData: ChangeAvatarRequest): Promise<void> {
-    const responseWrapper = await this._axios.patch<ResponseEnvelope<void>>(`/userId/${requestData.userId}/avatar/${requestData.avatar}`, requestData);
-    return TownsServiceClient.unwrapOrThrowError(responseWrapper, true);
+  async setAvatarForUser(requestData: SetAvatarRequest): Promise<void> {
+    const query = `
+      mutation {
+        setAvatarForUser(email: "${ requestData.email }", avatar: "${ requestData.avatar }") {
+          isSuccess,
+          email,
+          avatar
+        }
+      }
+    `;
+
+    const response = await this._axios.post('/graphql', { query });
+
+    console.log(response.data.data.registerUser.isSuccess); 
+    console.log(response.data.data.registerUser.email); 
+    console.log(response.data.data.registerUser.avatar); 
   }
 
-  // Get avatar for the user
-  async getAvatar(requestData: GetAvatarRequest): Promise<GetAvatarResponse> {
-    console.log("inside get avatar");
-    const responseWrapper = await this._axios.get<ResponseEnvelope<TownListResponse>>('/towns');
+  async getAvatarForUser(requestData: GetAvatarRequest): Promise<GetAvatarResponse> {
+    const query = `
+      query {
+        getAvatarForUser(email: "${ requestData.email }") {
+          isSuccess,
+          email,
+          avatar
+        }
+      }
+    `;
 
-    // const responseWrapper = await this._axios.get<ResponseEnvelope<GetAvatarResponse>>(`/userId/${requestData.userId}/avatar`);
-    // return TownsServiceClient.unwrapOrThrowError(responseWrapper, true);
-    console.log("returning ");
+    const response = await this._axios.post('/graphql', { query });
 
-    return ({ avatar: 'granny' });
+    console.log(response.data.data.registerUser.isSuccess); 
+    console.log(response.data.data.registerUser.email); 
+    console.log(response.data.data.registerUser.avatar); 
+
+    return response.data.data.registerUser.avatar;
   }
 }
