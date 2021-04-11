@@ -27,10 +27,10 @@ export default function SignUp() {
 
   const handleSubmit = async () => {
     const response = await apiClient.handleRegisterSubmit({ name, email, password });
-    if (response.data.data.loginUser.isSuccess === true) {
+    if (response.isSuccess === true) {
       history.replace('/signin');
       toast({
-        title: `Sign up for ${response.data.data.loginUser.name} successful`,
+        title: `Sign up for ${response.name} successful`,
         description: 'Sign in to your profile',
         status: 'success',
         duration: 9000,
