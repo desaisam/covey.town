@@ -31,6 +31,9 @@ export interface StateContextType {
   toggleWidth(): void;
   preferredMode: 'sidebar' | 'fullwidth';
   highlightedProfiles: string[];
+  email : string;
+  setEmail(email : string): void;
+  
 }
 
 export const StateContext = createContext<StateContextType>(null!);
@@ -56,7 +59,8 @@ export default function AppStateProvider(
   const [activeSinkId, setActiveSinkId] = useState('default');
   const [settings, dispatchSetting] = useReducer(settingsReducer, initialSettings);
   const [isSignedIn, setSignedIn] = useState(false);
-
+  const [email, setEmail] = useState('');
+  
   const contextValue = {
     isSignedIn,
     setSignedIn,
@@ -70,6 +74,8 @@ export default function AppStateProvider(
     toggleWidth: props.toggleWidth ?? (() => {}),
     preferredMode: props.preferredMode,
     highlightedProfiles: props.highlightedProfiles,
+    email,
+    setEmail,
   } as StateContextType;
 
   const getToken: StateContextType['getToken'] = room => {

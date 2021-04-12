@@ -3,6 +3,7 @@ import Phaser from 'phaser';
 import Player, { UserLocation } from '../../classes/Player';
 import Video from '../../classes/Video/Video';
 import useCoveyAppState from '../../hooks/useCoveyAppState';
+import { useAppState } from '../VideoCall/VideoFrontend/state/index';
 
 // https://medium.com/@michaelwesthadley/modular-game-worlds-in-phaser-3-tilemaps-1-958fc7e6bbd6
 class CoveyGameScene extends Phaser.Scene {
@@ -508,6 +509,9 @@ export default function WorldMap(): JSX.Element {
   const {
     emitMovement, players, apiClient, myPlayerID
   } = useCoveyAppState();
+  const {
+    email
+  } = useAppState();
   const [gameScene, setGameScene] = useState<CoveyGameScene>();
   const [myavatar, setAvatar] = useState<string>('monk');
   useEffect(() => {
@@ -528,13 +532,14 @@ export default function WorldMap(): JSX.Element {
     async function getAvatar() {
         console.log("Inside Setting avatar"); 
         console.log(apiClient);
+        console.log(`EMail ${email}`);
         
-         const res = await apiClient.getAvatar({userId : myPlayerID});
-         console.log(res);
+        const res = await apiClient.getAvatarForUser({ email });
+        console.log(res);
          
-         setAvatar(res.avatar);
+        setAvatar(res.avatar);
 
-         console.log(myavatar);
+        console.log(myavatar);
          
      }
      getAvatar();

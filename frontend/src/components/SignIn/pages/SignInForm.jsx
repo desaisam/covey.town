@@ -15,9 +15,10 @@ import TownsServiceClient from '../../../classes/TownsServiceClient';
 import ErrorMessage from '../ErrorMessage';
 import { useAppState } from '../../VideoCall/VideoFrontend/state';
 
+
 export default function SignIn() {
   const {isSignedIn, setSignedIn} = useAppState();
-  const [email, setEmail] = useState('');
+  const {email , setEmail} = useAppState();
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
   const [isLoading, setIsLoading] = useState(false);

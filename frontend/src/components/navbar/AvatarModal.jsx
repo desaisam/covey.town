@@ -3,10 +3,12 @@ import { Button, Modal, ModalBody, ModalCloseButton, ModalContent, ModalFooter, 
 import { useDisclosure, useToast } from "@chakra-ui/react"
 import PropTypes from 'prop-types';
 import useCoveyAppState from '../../hooks/useCoveyAppState';
+import { useAppState } from '../VideoCall/VideoFrontend/state';
 
 export default function AvatarModal({name, selection}){
 const { onOpen, isOpen, onClose } = useDisclosure()
 const { apiClient, avatar, myPlayerID } = useCoveyAppState();
+const { email } = useAppState();
 const [currentAvatar, setAvatar] = useState(avatar);
 const toast = useToast();
 
@@ -17,6 +19,7 @@ const onClickYes = value => () => {
     console.log(`Current Avatar ${currentAvatar}`);
     setAvatar(value);
     console.log(`You have Selected ${currentAvatar}`)
+    console.log(`Inside avatar Modal the email is : ${ email }`);
     try {
       // Uncomment below when the backendd is ready
       // apiClient.changeAvatar({avatar : value, userId : '123'});
