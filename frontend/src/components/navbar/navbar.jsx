@@ -17,12 +17,7 @@ import {
 } from '@chakra-ui/react';
 import { HamburgerIcon, CloseIcon, ChevronDownIcon } from '@chakra-ui/icons';
 import { useHistory } from 'react-router-dom';
-<<<<<<< HEAD
-import { Image } from '@chakra-ui/core';
-import ChangeAvatar from './ChangeAvatarMenu'
-=======
 import { useAppState } from '../VideoCall/VideoFrontend/state';
->>>>>>> c01262fffc403906aaf07a7566b44f91c3077648
 
 export default function NavBar() {
   const { isOpen, onOpen, onClose } = useDisclosure();
@@ -46,15 +41,6 @@ export default function NavBar() {
             <HStack as='nav' spacing={4} display={{ base: 'none', md: 'flex' }} />
           </HStack>
           <Flex alignItems='center'>
-<<<<<<< HEAD
-            <ChangeAvatar/>
-            <Button onClick={onClickSignIn} variant='solid' colorScheme='teal' size='sm' mr={4}>
-              Sign In 
-            </Button>
-            <Button onClick={onClickSignUp} variant='solid' colorScheme='teal' size='sm' mr={4}>
-              Sign Up
-            </Button>
-=======
             {!isSignedIn && (
               <>
                 <Button onClick={onClickSignIn} variant='solid' colorScheme='teal' size='sm' mr={4}>
@@ -65,7 +51,6 @@ export default function NavBar() {
                 </Button>
               </>
             )}
->>>>>>> c01262fffc403906aaf07a7566b44f91c3077648
             <Menu>
               <MenuButton as={Button} rounded='full' variant='link' cursor='pointer'>
                 <Avatar
