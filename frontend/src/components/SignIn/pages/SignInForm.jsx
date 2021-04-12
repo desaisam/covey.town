@@ -13,14 +13,16 @@ import {
 
 import TownsServiceClient from '../../../classes/TownsServiceClient';
 import ErrorMessage from '../ErrorMessage';
+import { useAppState } from '../../VideoCall/VideoFrontend/state';
+
 
 export default function SignIn() {
-  const [email, setEmail] = useState('');
+  // const [email, setEmail] = useState('');
+  const {email , setEmail} = useAppState();
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
   const [isLoading, setIsLoading] = useState(false);
   const apiClient = new TownsServiceClient();
-
   const handleSubmit = async event => {
     event.preventDefault();
     setIsLoading(true);
