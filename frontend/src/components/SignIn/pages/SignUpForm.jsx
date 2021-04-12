@@ -10,9 +10,10 @@ import {
   CircularProgress,
 } from '@chakra-ui/core';
 
-import { Link } from 'react-router-dom';
+import { Link , useHistory} from 'react-router-dom';
+import { useToast } from '@chakra-ui/react';
 import ErrorMessage from '../ErrorMessage';
-import userLogin from '../mockApi';
+import TownsServiceClient from '../../../classes/TownsServiceClient';
 
 export default function SignUp() {
   const [name, setName] = useState('');
@@ -20,15 +21,30 @@ export default function SignUp() {
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
   const [isLoading, setIsLoading] = useState(false);
-  const handleSubmit = async event => {
-    event.preventDefault();
-    setIsLoading(true);
-    try {
-      await userLogin({ name, email, password });
-      setIsLoading(false);
-    } catch (e) {
-      setError('Unable to Sign Up');
-      setIsLoading(false);
+  const apiClient = new TownsServiceClient();
+  const toast = useToast();
+  const history = useHistory();
+
+  const handleSubmit = async () => {
+    const response = await apiClient.handleRegisterSubmit({ name, email, password });
+    if (response.isSuccess === true) {
+      history.replace('/signin');
+      toast({
+        title: `Sign up for ${response.name} successful`,
+        description: 'Sign in to your profile',
+        status: 'success',
+        duration: 9000,
+        isClosable: true,
+      });
+    } else {
+      alert('Invalid Credentials');
+      toast({
+        title: 'Sign up failed!',
+        description: 'Check the details entered',
+        status: 'error',
+        duration: 9000,
+        isClosable: true,
+      });
       setEmail('');
       setPassword('');
     }

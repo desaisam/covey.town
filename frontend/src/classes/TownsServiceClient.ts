@@ -1,5 +1,5 @@
-import axios, { AxiosInstance, AxiosResponse } from 'axios';
 import assert from 'assert';
+import axios, { AxiosInstance, AxiosResponse } from 'axios';
 import { ServerPlayer } from './Player';
 
 /**
@@ -89,7 +89,7 @@ export type CoveyTownInfo = {
   friendlyName: string;
   coveyTownID: string;
   currentOccupancy: number;
-  maximumOccupancy: number
+  maximumOccupancy: number;
 };
 
 export interface UserSignInRequest {
@@ -101,6 +101,22 @@ export interface UserSignUpRequest {
   name: string;
   email: string;
   password: string;
+}
+
+export interface UserSignInResponse {
+  isSuccess: boolean;
+  message: string;
+  name: string;
+  email: string;
+  avatar: string;
+}
+
+export interface UserSignInUpResponse {
+  isSuccess: boolean;
+  message: string;
+  name: string;
+  email: string;
+  avatar: string;
 }
 
 export default class TownsServiceClient {
@@ -117,7 +133,10 @@ export default class TownsServiceClient {
     this._axios = axios.create({ baseURL });
   }
 
-  static unwrapOrThrowError<T>(response: AxiosResponse<ResponseEnvelope<T>>, ignoreResponse = false): T {
+  static unwrapOrThrowError<T>(
+    response: AxiosResponse<ResponseEnvelope<T>>,
+    ignoreResponse = false,
+  ): T {
     if (response.data.isOK) {
       if (ignoreResponse) {
         return {} as T;
@@ -129,17 +148,25 @@ export default class TownsServiceClient {
   }
 
   async createTown(requestData: TownCreateRequest): Promise<TownCreateResponse> {
-    const responseWrapper = await this._axios.post<ResponseEnvelope<TownCreateResponse>>('/towns', requestData);
+    const responseWrapper = await this._axios.post<ResponseEnvelope<TownCreateResponse>>(
+      '/towns',
+      requestData,
+    );
     return TownsServiceClient.unwrapOrThrowError(responseWrapper);
   }
 
   async updateTown(requestData: TownUpdateRequest): Promise<void> {
-    const responseWrapper = await this._axios.patch<ResponseEnvelope<void>>(`/towns/${requestData.coveyTownID}`, requestData);
+    const responseWrapper = await this._axios.patch<ResponseEnvelope<void>>(
+      `/towns/${requestData.coveyTownID}`,
+      requestData,
+    );
     return TownsServiceClient.unwrapOrThrowError(responseWrapper, true);
   }
 
   async deleteTown(requestData: TownDeleteRequest): Promise<void> {
-    const responseWrapper = await this._axios.delete<ResponseEnvelope<void>>(`/towns/${requestData.coveyTownID}/${requestData.coveyTownPassword}`);
+    const responseWrapper = await this._axios.delete<ResponseEnvelope<void>>(
+      `/towns/${requestData.coveyTownID}/${requestData.coveyTownPassword}`,
+    );
     return TownsServiceClient.unwrapOrThrowError(responseWrapper, true);
   }
 
@@ -153,12 +180,61 @@ export default class TownsServiceClient {
     return TownsServiceClient.unwrapOrThrowError(responseWrapper);
   }
 
-  async handleSignInSubmit(requestData: UserSignInRequest): Promise<void> {
-    const responseWrapper = await this._axios.post('/dummy', requestData);
+  async getUserInfo(): Promise<string> {
+    const resp = await this._axios.post('/graphql', {
+      query: `
+        query {
+          getAllUsers {
+            id
+            email
+            name
+            password
+            avatar
+          }
+        }
+      `,
+    });
+
+    const id = resp.data.data.getAllUsers[0].id.toString();
+    const email = resp.data.data.getAllUsers[0].email.toString();
+    const name = resp.data.data.getAllUsers[0].name.toString();
+    const password = resp.data.data.getAllUsers[0].password.toString();
+    const avatar = resp.data.data.getAllUsers[0].avatar.toString();
+
+    return `id: ${id}, email: ${email}, name: ${name}, password: ${password}, avatar: ${avatar}`;
   }
 
-  async handleSignUpSubmit(requestData: UserSignUpRequest): Promise<void> {
-    const responseWrapper = await this._axios.post('/dummmy', requestData);
+  async handleLoginSubmit(requestData: UserSignInRequest): Promise<UserSignInUpResponse> {
+    const query = `
+      mutation {
+        loginUser(email: "${requestData.email}", password: "${requestData.password}") {
+          isSuccess,
+          message,
+          name,
+          email,
+          avatar
+        }
+      }
+    `;
+
+    const response = await this._axios.post('/graphql', { query });
+    return response.data.data.loginUser;
   }
 
+  async handleRegisterSubmit(requestData: UserSignUpRequest): Promise<UserSignInUpResponse> {
+    const query = `
+      mutation {
+        registerUser(name: "${requestData.name}", email: "${requestData.email}", password: "${requestData.password}") {
+          isSuccess,
+          message,
+          name,
+          email,
+          avatar
+        }
+      }
+    `;
+
+    const response = await this._axios.post('/graphql', { query });
+    return response.data.data.loginUser;
+  }
 }

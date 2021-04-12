@@ -11,28 +11,34 @@ import {
   CircularProgress,
 } from '@chakra-ui/core';
 import { useToast } from '@chakra-ui/react';
-import userSignIn from '../mockApi';
+import TownsServiceClient from '../../../classes/TownsServiceClient';
 import ErrorMessage from '../ErrorMessage';
+import { useAppState } from '../../VideoCall/VideoFrontend/state';
 
 export default function SignIn() {
+  const {isSignedIn, setSignedIn} = useAppState();
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
   const [isLoading, setIsLoading] = useState(false);
   const history = useHistory();
   const toast = useToast();
+  const apiClient = new TownsServiceClient();
+
   const handleSubmit = async () => {
-    const result = await userSignIn({ email, password });
-    if (result === true) {
+    const response = await apiClient.handleLoginSubmit({ email, password });
+    if (response.isSuccess === true) {
+      setSignedIn(true);
       history.replace('/');
       toast({
-        title: `Welcome ${email}`,
+        title: `Welcome ${response.name}`,
         description: 'Welcome to your profile',
         status: 'success',
         duration: 9000,
         isClosable: true,
       });
     } else {
+      setSignedIn(false);
       alert('Invalid Credentials');
       toast({
         title: 'Invalid Credentials',
@@ -42,7 +48,6 @@ export default function SignIn() {
         isClosable: true,
       });
     }
-    setIsLoading(false);
   };
 
   return (
