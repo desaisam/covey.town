@@ -17,12 +17,14 @@ import {
 } from '@chakra-ui/react';
 import { HamburgerIcon, CloseIcon } from '@chakra-ui/icons';
 import { useHistory } from 'react-router-dom';
+import { useAppState } from '../VideoCall/VideoFrontend/state';
 
 export default function NavBar() {
   const { isOpen, onOpen, onClose } = useDisclosure();
   const history = useHistory();
   const onClickSignIn = () => history.push('/signin');
   const onClickSignUp = () => history.push('/signup');
+  const { isSignedIn } = useAppState();
 
   return (
     <>
@@ -39,12 +41,16 @@ export default function NavBar() {
             <HStack as='nav' spacing={4} display={{ base: 'none', md: 'flex' }} />
           </HStack>
           <Flex alignItems='center'>
-            <Button onClick={onClickSignIn} variant='solid' colorScheme='teal' size='sm' mr={4}>
-              Log In
-            </Button>
-            <Button onClick={onClickSignUp} variant='solid' colorScheme='teal' size='sm' mr={4}>
-              Register
-            </Button>
+            {!isSignedIn && (
+              <>
+                <Button onClick={onClickSignIn} variant='solid' colorScheme='teal' size='sm' mr={4}>
+                  Log In
+                </Button>
+                <Button onClick={onClickSignUp} variant='solid' colorScheme='teal' size='sm' mr={4}>
+                  Register
+                </Button>
+              </>
+            )}
             <Menu>
               <MenuButton as={Button} rounded='full' variant='link' cursor='pointer'>
                 <Avatar
@@ -64,7 +70,7 @@ export default function NavBar() {
 
         {isOpen ? (
           <Box pb={4}>
-            <Stack as='nav' spacing={4}/>
+            <Stack as='nav' spacing={4} />
           </Box>
         ) : null}
       </Box>

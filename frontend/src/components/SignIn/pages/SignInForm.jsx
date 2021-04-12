@@ -13,8 +13,10 @@ import {
 import { useToast } from '@chakra-ui/react';
 import TownsServiceClient from '../../../classes/TownsServiceClient';
 import ErrorMessage from '../ErrorMessage';
+import { useAppState } from '../../VideoCall/VideoFrontend/state';
 
 export default function SignIn() {
+  const {isSignedIn, setSignedIn} = useAppState();
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
@@ -26,6 +28,7 @@ export default function SignIn() {
   const handleSubmit = async () => {
     const response = await apiClient.handleLoginSubmit({ email, password });
     if (response.isSuccess === true) {
+      setSignedIn(true);
       history.replace('/');
       toast({
         title: `Welcome ${response.name}`,
@@ -35,6 +38,7 @@ export default function SignIn() {
         isClosable: true,
       });
     } else {
+      setSignedIn(false);
       alert('Invalid Credentials');
       toast({
         title: 'Invalid Credentials',
