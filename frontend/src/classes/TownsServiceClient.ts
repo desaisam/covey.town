@@ -241,10 +241,6 @@ export default class TownsServiceClient {
     console.log(`Query ${query}`);
 
     const response = await this._axios.post('http://localhost:8081/graphql', { query });
-
-    console.log(`Response in Twon Service Post ${response.data.data.loginUser}`);
-    alert(`Handling Register submit`);
-
     return response.data.data.registerUser;
   }
 }

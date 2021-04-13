@@ -29,7 +29,8 @@ export default function SignIn() {
     const response = await apiClient.handleLoginSubmit({ email, password });
     if (response.isSuccess === true) {
 
-      // setSignedIn(true);
+      setSignedIn(true);
+      console.log(`Signed In ${isSignedIn}`);
       history.replace('/');
       toast({
         title: `Welcome ${response.name}`,
@@ -58,7 +59,7 @@ export default function SignIn() {
           <Heading> Sign In </Heading>
         </Box>
         <Box my={4} textAlign='left'>
-          <form onSubmit={handleSubmit}>
+          <form onSubmit={(ev)=>{ev.preventDefault();handleSubmit()}}>
             {error && <ErrorMessage />}
             <FormControl isRequired>
               <FormLabel> Email </FormLabel>
