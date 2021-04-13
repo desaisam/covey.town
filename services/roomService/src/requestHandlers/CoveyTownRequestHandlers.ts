@@ -106,6 +106,7 @@ export async function townJoinHandler(requestData: TownJoinRequest): Promise<Res
       message: 'Error: No such town',
     };
   }
+  // Use user name to look 
   const newPlayer = new Player(requestData.userName);
   const newSession = await coveyTownController.addPlayer(newPlayer);
   assert(newSession.videoToken);

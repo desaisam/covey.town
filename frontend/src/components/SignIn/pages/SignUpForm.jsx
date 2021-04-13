@@ -10,7 +10,8 @@ import {
   CircularProgress,
 } from '@chakra-ui/core';
 
-import { Link } from 'react-router-dom';
+import { Link , useHistory} from 'react-router-dom';
+import { useToast } from '@chakra-ui/react';
 import ErrorMessage from '../ErrorMessage';
 import TownsServiceClient from '../../../classes/TownsServiceClient';
 
@@ -21,16 +22,35 @@ export default function SignUp() {
   const [error, setError] = useState('');
   const [isLoading, setIsLoading] = useState(false);
   const apiClient = new TownsServiceClient();
+  const toast = useToast();
+  const history = useHistory();
 
-  const handleSubmit = async event => {
-    event.preventDefault();
-    setIsLoading(true);
-    try {
-      await apiClient.handleRegisterSubmit({ name, email, password });
-      setIsLoading(false);
-    } catch (e) {
-      setError('Unable to Sign Up');
-      setIsLoading(false);
+  const handleSubmit = async () => {
+    console.log(`Correctly Clicked Handle Submit Button`);
+    console.log(`Api CLient ${apiClient}`);
+    const response = await apiClient.handleRegisterSubmit({ name, email, password });
+    console.log(`Response back to signup ${response.isSuccess}`);
+    console.log(`Response back to signup ${response.message}`);
+    
+    if (response.isSuccess === true) {
+      alert(`Success`);
+      history.replace('/');
+      toast({
+        title: `Sign up for ${response.name} successful`,
+        description: 'Sign in to your profile',
+        status: 'success',
+        duration: 9000,
+        isClosable: true,
+      });
+    } else {
+      alert('Invalid Credentials');
+      toast({
+        title: 'Sign up failed!',
+        description: 'Check the details entered',
+        status: 'error',
+        duration: 9000,
+        isClosable: true,
+      });
       setEmail('');
       setPassword('');
     }
@@ -43,7 +63,7 @@ export default function SignUp() {
           <Heading> Sign Up </Heading>
         </Box>
         <Box my={4} textAlign='left'>
-          <form onSubmit={handleSubmit}>
+          <form onSubmit={(ev)=>{ev.preventDefault(); handleSubmit()}}>
             {error && <ErrorMessage />}
             <FormControl isRequired>
               <FormLabel> Name </FormLabel>
