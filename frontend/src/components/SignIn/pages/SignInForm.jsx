@@ -28,7 +28,8 @@ export default function SignIn() {
   const handleSubmit = async () => {
     const response = await apiClient.handleLoginSubmit({ email, password });
     if (response.isSuccess === true) {
-      setSignedIn(true);
+
+      // setSignedIn(true);
       history.replace('/');
       toast({
         title: `Welcome ${response.name}`,

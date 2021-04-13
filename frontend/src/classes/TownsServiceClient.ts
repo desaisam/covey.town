@@ -181,7 +181,7 @@ export default class TownsServiceClient {
   }
 
   async getUserInfo(): Promise<string> {
-    const resp = await this._axios.post('/graphql', {
+    const resp = await this._axios.post('http://localhost:8081/graphql', {
       query: `
         query {
           getAllUsers {
@@ -216,12 +216,16 @@ export default class TownsServiceClient {
         }
       }
     `;
+    console.log(`Checking response after login `);
 
-    const response = await this._axios.post('/graphql', { query });
+    const response = await this._axios.post('http://localhost:8081/graphql', { query });
+    console.log(`Checking response after login ${response}`);
+
     return response.data.data.loginUser;
   }
 
   async handleRegisterSubmit(requestData: UserSignUpRequest): Promise<UserSignInUpResponse> {
+
     const query = `
       mutation {
         registerUser(name: "${requestData.name}", email: "${requestData.email}", password: "${requestData.password}") {
@@ -234,7 +238,13 @@ export default class TownsServiceClient {
       }
     `;
 
-    const response = await this._axios.post('/graphql', { query });
-    return response.data.data.loginUser;
+    console.log(`Query ${query}`);
+
+    const response = await this._axios.post('http://localhost:8081/graphql', { query });
+
+    console.log(`Response in Twon Service Post ${response.data.data.loginUser}`);
+    alert(`Handling Register submit`);
+
+    return response.data.data.registerUser;
   }
 }
