@@ -67,7 +67,7 @@ class CoveyGameScene extends Phaser.Scene {
       this.updatePlayerLocation(p);
       console.log("updating player anims");
       
-      // this.updatePlayerAnims(p);
+      this.updatePlayerAnims(p);
     });
     // Remove disconnected players from board
     const disconnectedPlayers = this.players.filter(
