@@ -26,9 +26,13 @@ export default function SignUp() {
   const history = useHistory();
 
   const handleSubmit = async () => {
+    console.log(`Correctly Clicked Handle Submit Button`);
+    console.log(`Api CLient ${apiClient}`);
     const response = await apiClient.handleRegisterSubmit({ name, email, password });
+    console.log(`Response back to signup ${response}`);
     if (response.isSuccess === true) {
-      history.replace('/signin');
+      alert(`Success`);
+      history.replace('/');
       toast({
         title: `Sign up for ${response.name} successful`,
         description: 'Sign in to your profile',
@@ -57,7 +61,7 @@ export default function SignUp() {
           <Heading> Sign Up </Heading>
         </Box>
         <Box my={4} textAlign='left'>
-          <form onSubmit={handleSubmit}>
+          <form onSubmit={(ev)=>{ev.preventDefault(); handleSubmit()}}>
             {error && <ErrorMessage />}
             <FormControl isRequired>
               <FormLabel> Name </FormLabel>

@@ -13,7 +13,7 @@ export default class Player {
 
   /** The player's username, which is not guaranteed to be unique within the town * */
   private readonly _userName: string;
-
+// Add avatar here 
   constructor(userName: string) {
     this.location = {
       x: 0,

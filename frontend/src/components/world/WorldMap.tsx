@@ -9,7 +9,8 @@ import { useAppState } from '../VideoCall/VideoFrontend/state/index';
 class CoveyGameScene extends Phaser.Scene {
   private player?: {
     sprite: Phaser.Types.Physics.Arcade.SpriteWithDynamicBody, 
-    label: Phaser.GameObjects.Text
+    label: Phaser.GameObjects.Text,
+    avatar: string
   };
 
   private id?: string;
@@ -64,6 +65,8 @@ class CoveyGameScene extends Phaser.Scene {
       return;
     }
     players.forEach((p) => {
+      // console.log(`Updating Players location ${p.avatar} Id : ${p.userName}`);
+      
       this.updatePlayerLocation(p);
       console.log("updating player anims");
       
@@ -90,6 +93,9 @@ class CoveyGameScene extends Phaser.Scene {
   }
 
   updatePlayerLocation(player: Player) {
+    console.log(`Updating player ${player.userName}`);
+    console.log(`He has an avatar ${player.avatar}`);
+    
     let myPlayer = this.players.find((p) => p.id === player.id);
     if (!myPlayer) {
       let { location } = player;
@@ -99,9 +105,9 @@ class CoveyGameScene extends Phaser.Scene {
           moving: false,
           x: 0,
           y: 0,
-        };
+        }; 
       }
-      myPlayer = new Player(player.id, player.userName, location);
+      myPlayer = new Player(player.id, player.userName, location,player.avatar);
       this.players.push(myPlayer);
     }
     
@@ -208,6 +214,10 @@ class CoveyGameScene extends Phaser.Scene {
   }
 
   update() {
+    // console.log("Update Called");
+    // console.log(this.player);
+    
+    
     if (this.paused) {
       return;
     }
@@ -331,7 +341,7 @@ class CoveyGameScene extends Phaser.Scene {
     labels.forEach(label => {
       if(label.x && label.y){
         this.add.text(label.x, label.y, label.text.text, {
-          color: '#FFFFFF',
+          color: '#FFFFFG',
           backgroundColor: '#000000',
         })
       }
@@ -372,7 +382,8 @@ class CoveyGameScene extends Phaser.Scene {
     });
     this.player = {
       sprite,
-      label
+      label,
+      avatar : 'monk'
     };
 
     /* Configure physics overlap behavior for when the player steps into
@@ -564,6 +575,10 @@ export default function WorldMap(): JSX.Element {
   }, [video, emitMovement, myavatar]);
 
   const deepPlayers = JSON.stringify(players);
+  // console.log("Deep Playerss");
+  
+  // console.log(deepPlayers);
+  
   useEffect(() => {
     gameScene?.updatePlayersLocations(players);
   }, [players, deepPlayers, gameScene]);

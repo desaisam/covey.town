@@ -19,7 +19,6 @@ import React from 'react';
 import { Image, Modal, ModalBody, ModalCloseButton, ModalContent, ModalFooter, ModalHeader, ModalOverlay } from '@chakra-ui/core';
 import AvatarModal from './AvatarModal'
 
-
 export default function ChangeAvatar() {
 
 const { isOpen, onOpen, onClose } = useDisclosure()
