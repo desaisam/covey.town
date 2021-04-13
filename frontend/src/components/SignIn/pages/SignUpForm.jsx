@@ -61,7 +61,7 @@ export default function SignUp() {
           <Heading> Sign Up </Heading>
         </Box>
         <Box my={4} textAlign='left'>
-          <form onSubmit={handleSubmit}>
+          <form onSubmit={(ev)=>{ev.preventDefault(); handleSubmit()}}>
             {error && <ErrorMessage />}
             <FormControl isRequired>
               <FormLabel> Name </FormLabel>
