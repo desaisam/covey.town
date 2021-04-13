@@ -29,7 +29,9 @@ export default function SignUp() {
     console.log(`Correctly Clicked Handle Submit Button`);
     console.log(`Api CLient ${apiClient}`);
     const response = await apiClient.handleRegisterSubmit({ name, email, password });
-    console.log(`Response back to signup ${response}`);
+    console.log(`Response back to signup ${response.isSuccess}`);
+    console.log(`Response back to signup ${response.message}`);
+    
     if (response.isSuccess === true) {
       alert(`Success`);
       history.replace('/');

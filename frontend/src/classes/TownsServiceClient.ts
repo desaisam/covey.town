@@ -209,7 +209,7 @@ export default class TownsServiceClient {
     `;
     console.log(`Checking response after login `);
 
-    const response = await this._axios.post('http://localhost:8081/graphql', { query });
+    const response = await this._axios.post('/graphql', { query });
     console.log(`Checking response after login ${response}`);
 
     return response.data.data.loginUser;
