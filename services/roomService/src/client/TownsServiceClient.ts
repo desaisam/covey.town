@@ -1,6 +1,8 @@
 import axios, { AxiosInstance, AxiosResponse } from 'axios';
 import assert from 'assert';
 import { UserLocation } from '../CoveyTypes';
+import { RegisterResponseType } from '../schemas/typedefs/RegisterResponseType';
+import { LoginResponseType } from '../schemas/typedefs/LoginResponseType';
 
 
 export type ServerPlayer = { _id: string, _userName: string, location: UserLocation };
@@ -95,6 +97,35 @@ export type CoveyTownInfo = {
   maximumOccupancy: number
 };
 
+export type LoginResponseType = {
+  isSuccess:boolean;
+  message:string;
+  name:string;
+  email:string;
+  avatar:string;
+}
+
+export type RegisterResponseType = {
+  isSuccess:boolean;
+  message:string;
+  name:string;
+  email:string;
+  avatar:string;
+}
+
+export interface ChangeAvatarRequest {
+  userId: string;
+  avatar: string;
+}
+
+export interface GetAvatarRequest {
+  userId: string | undefined;
+}
+
+export interface GetAvatarResponse {
+  avatar: string;
+}
+
 export default class TownsServiceClient {
   private _axios: AxiosInstance;
 
@@ -145,4 +176,23 @@ export default class TownsServiceClient {
     return TownsServiceClient.unwrapOrThrowError(responseWrapper);
   }
 
+  async handleLoginSubmit(query: string): Promise<LoginResponseType> {
+    const response = await this._axios.post('/graphql', { query });
+    return response.data.data.loginUser;
+  }
+
+  async handleRegisterSubmit(query: string): Promise<RegisterResponseType> {
+    const response = await this._axios.post('/graphql', { query });
+    return response.data.data.registerUser;
+  }
+
+  async setAvatarForUser(query: string): Promise<GetAvatarResponse> {
+    const response = await this._axios.post('/graphql', { query });
+    return response.data.data.registerUser;
+  }
+
+  async getAvatarForUser(query: string): Promise<GetAvatarResponse> {
+    const response = await this._axios.post('/graphql', { query });
+    return response.data.data.registerUser;
+  }
 }

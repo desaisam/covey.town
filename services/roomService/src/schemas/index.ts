@@ -1,33 +1,50 @@
 import { GraphQLObjectType, GraphQLSchema, GraphQLInt, GraphQLString, GraphQLList } from 'graphql';
-import { UserType } from './typedefs/UserType';
+import { GetAvatarForUserResponse } from './typedefs/GetAvatarForUserResponse';
 import { pool } from './postgres/db'
 import {nanoid} from 'nanoid';
 import { RegisterResponseType } from './typedefs/RegisterResponseType';
 import { LoginResponseType } from './typedefs/LoginResponseType';
+import { SetAvatarForUserResponse } from './typedefs/SetAvatarForUserResponse';
 
+
+async function getUserFromEmail(email: string): Promise<any> {
+  const response = await pool.query('SELECT * FROM userdata');
+  const data = response.rows;
+  const user = data.find(user => (user.email === email));
+  return user;
+}
 
 const RootQuery = new GraphQLObjectType({
   name: "RootQueryType",
   fields: {
-    getAllUsers: {
-      type: new GraphQLList(UserType),
-      args: { id: { type: GraphQLString } },
-      // resolve(parent, args) {
-      async resolve() {
-        // Adding one random entry to DB
-        const random = nanoid();
-        const userData = {
-          email: `test-${ random }@test.com`,
-          name: `user-${ random }`,
-          password: '12345',
-          avatar: 'avatar-1'
+    getAvatarForUser: {
+      type: GetAvatarForUserResponse,
+      args: { 
+        email: { type: GraphQLString } 
+      },
+      async resolve(parent, args) {
+        const nousage = parent;
+        try {
+          if (args.email) {
+            const user = await getUserFromEmail(args.email);
+            const avatar = user.avatar;
+            if (avatar) {
+              return {
+                isSuccess: true,
+                email: args.email,
+                avatar
+              }
+            }
+          }
+          return {
+            isSuccess: false,
+          }
+        } catch (e) {
+          console.log(`Error in getting avatar for user: ${args.userId}. ${e}`);
+          return {
+            isSuccess: false,
+          }
         }
-        await pool.query(`INSERT INTO userdata (email, name, password, avatar) VALUES ($1, $2, $3, $4)`, [userData.email, userData.name, userData.password, userData.avatar]);
-
-        // Retrieve last added entry and return
-        const data = await pool.query('SELECT * FROM userdata');
-        const lastIndex = data.rowCount - 1;
-        return [data.rows[lastIndex]];
       },
     },
   },
@@ -73,13 +90,13 @@ const Mutation = new GraphQLObjectType({
           }
 
           // Put this data in args to database
-          await pool.query(`INSERT INTO userdata (email, name, password, avatar) VALUES ($1, $2, $3, $4)`, [args.email, args.name, args.password, 'avatar-1']);
+          await pool.query(`INSERT INTO userdata (email, name, password, avatar) VALUES ($1, $2, $3, $4)`, [args.email, args.name, args.password, 'barmaid']);
           return {
             isSuccess: true,
             message: 'Successfully registered!',
             name: args.name,
             email: args.email,
-            avatar: 'avatar-1',
+            avatar: 'barmaid',
           }
         } catch (e) {
           // Log error and return 'false' isSuccess with error message
@@ -114,7 +131,6 @@ const Mutation = new GraphQLObjectType({
             message: 'Successfully logged-in!',
             name: user.name,
             email: user.email,
-            avatar: user.avatar,
           }
         } catch (e) {
           // Log error and return 'false' isSuccess with error message
@@ -122,6 +138,30 @@ const Mutation = new GraphQLObjectType({
           return {
             isSuccess: false,
             message: 'Something went wrong. Please try again :('
+          }
+        }
+      },
+    },
+    setAvatarForUser: {
+      type: SetAvatarForUserResponse,
+      args: {
+        email: { type: GraphQLString },
+        avatar: { type: GraphQLString },
+      },
+      async resolve(parent, args) {
+        const nousage = parent;
+        try {
+          await pool.query(`update userdata set avatar=($1) where email=($2)`, [args.avatar, args.email]);
+          return {
+            isSuccess: true,
+            email: args.email,
+            avatar: args.avatar,
+          }
+        } catch (e) {
+          // Log error and return 'false' isSuccess with error message
+          console.log(`Error in adding avatar for email: ${ args.userId } to database. ${ e }`);
+          return {
+            isSuccess: false,
           }
         }
       },
