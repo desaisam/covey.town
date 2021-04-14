@@ -14,17 +14,38 @@ import {
   useDisclosure,
   useColorModeValue,
   Stack,
+  useToast,
+  Modal,
+  ModalOverlay,
+  ModalContent,
+  ModalHeader,
+  ModalFooter,
+  ModalBody,
+  ModalCloseButton,
 } from '@chakra-ui/react';
 import { HamburgerIcon, CloseIcon, ChevronDownIcon } from '@chakra-ui/icons';
 import { useHistory } from 'react-router-dom';
 import { useAppState } from '../VideoCall/VideoFrontend/state';
+import ChangeAvatar from './ChangeAvatarMenu';
 
 export default function NavBar() {
   const { isOpen, onOpen, onClose } = useDisclosure();
+  const { isSignedIn, setSignedIn } = useAppState();
+  const toast = useToast();
   const history = useHistory();
   const onClickSignIn = () => history.push('/signin');
   const onClickSignUp = () => history.push('/signup');
-  const { isSignedIn } = useAppState();
+  const onClickSignOut = () => {
+    setSignedIn(false);
+    history.push('/');
+    toast({
+        title: `Log out Successful`,
+        description: 'You have logged out Sucessfully ',
+        status: 'success',
+        duration: 4000,
+        isClosable: true,
+      });
+  }
 
   return (
     <>
@@ -42,7 +63,7 @@ export default function NavBar() {
           </HStack>
           <Flex alignItems='center'>
             {!isSignedIn && (
-              <>
+              <> 
                 <Button onClick={onClickSignIn} variant='solid' colorScheme='teal' size='sm' mr={4}>
                   Log In
                 </Button>
@@ -51,6 +72,36 @@ export default function NavBar() {
                 </Button>
               </>
             )}
+            { isSignedIn && (
+              <>
+              <ChangeAvatar/>         
+              <Button onClick ={onOpen} variant='solid' colorScheme='teal' size='sm' mr={4}>
+                  Log Out
+              </Button>
+              <Modal
+                isCentered
+                onClose={onClose}
+                isOpen={isOpen}
+                motionPreset="slideInBottom"
+              >
+                <ModalOverlay />
+                  <ModalContent>
+                    <ModalHeader>Think again...</ModalHeader>
+                    <ModalCloseButton />
+                    <ModalBody>
+                      Are you sure you want to Log out ?
+                    </ModalBody>
+                    <ModalFooter>
+                      <Button colorScheme="blue" mr={3} onClick={onClose}>
+                        No
+                      </Button>
+                      <Button variant="ghost" onClick={(ev)=>{ev.preventDefault();onClickSignOut()}}>Yes</Button>
+                    </ModalFooter>
+                  </ModalContent>
+               </Modal>
+              </>
+              )
+            }
             <Menu>
               <MenuButton as={Button} rounded='full' variant='link' cursor='pointer'>
                 <Avatar

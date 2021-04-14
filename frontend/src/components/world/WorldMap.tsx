@@ -214,10 +214,6 @@ class CoveyGameScene extends Phaser.Scene {
   }
 
   update() {
-    // console.log("Update Called");
-    // console.log(this.player);
-    
-    
     if (this.paused) {
       return;
     }
@@ -521,11 +517,12 @@ export default function WorldMap(): JSX.Element {
     emitMovement, players, apiClient, myPlayerID
   } = useCoveyAppState();
   const {
-    email
+    email,isSignedIn,avatar
   } = useAppState();
   const [gameScene, setGameScene] = useState<CoveyGameScene>();
-  const [myavatar, setAvatar] = useState<string>('monk');
+  console.log(`Getting from Global Staate ${avatar}`);
   useEffect(() => {
+    
     const config = {
       type: Phaser.AUTO,
       parent: 'map-container',
@@ -539,25 +536,10 @@ export default function WorldMap(): JSX.Element {
       },
     };
     
-    console.log("Setting avatar");
-    async function getAvatar() {
-        console.log("Inside Setting avatar"); 
-        console.log(apiClient);
-        console.log(`EMail ${email}`);
-        
-        const res = await apiClient.getAvatarForUser({ email });
-        console.log(res);
-         
-        setAvatar(res.avatar);
-
-        console.log(myavatar);
-         
-     }
-     getAvatar();
     const game = new Phaser.Game(config);
     if (video) {
-
-      const newGameScene = new CoveyGameScene(video, emitMovement, myavatar);
+ 
+      const newGameScene = new CoveyGameScene(video, emitMovement, avatar);
       console.log(`Setting game scene`)
 
       setGameScene(newGameScene);
@@ -572,7 +554,7 @@ export default function WorldMap(): JSX.Element {
     return () => {
       game.destroy(true);
     };
-  }, [video, emitMovement, myavatar]);
+  }, [video, emitMovement]);
 
   const deepPlayers = JSON.stringify(players);
   // console.log("Deep Playerss");

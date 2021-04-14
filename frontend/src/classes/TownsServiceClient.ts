@@ -227,7 +227,8 @@ export default class TownsServiceClient {
         }
       }
     `;
-
+    console.log(`Query ${query}`);
+      
     const response = await this._axios.post('/graphql', { query });
     return response.data.data.registerUser;
   }
@@ -244,10 +245,8 @@ export default class TownsServiceClient {
     `;
 
     const response = await this._axios.post('/graphql', { query });
+    console.log(`Response From Set Avatar ${JSON.stringify(response)}`);
 
-    console.log(response.data.data.registerUser.isSuccess); 
-    console.log(response.data.data.registerUser.email); 
-    console.log(response.data.data.registerUser.avatar); 
   }
 
   async getAvatarForUser(requestData: GetAvatarRequest): Promise<GetAvatarResponse> {
@@ -263,10 +262,9 @@ export default class TownsServiceClient {
 
     const response = await this._axios.post('/graphql', { query });
 
-    console.log(response.data.data.registerUser.isSuccess); 
-    console.log(response.data.data.registerUser.email); 
-    console.log(response.data.data.registerUser.avatar); 
+    console.log(`Response From Get Avatar ${JSON.stringify(response)}`);
 
-    return response.data.data.registerUser.avatar;
+
+    return response.data.data.getAvatarForUser.avatar;
   }
 }

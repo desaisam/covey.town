@@ -33,6 +33,8 @@ export interface StateContextType {
   highlightedProfiles: string[];
   email : string;
   setEmail(email : string): void;
+  avatar : string;
+  setAvatar(avatar : string) : void;
   
 }
 
@@ -60,7 +62,7 @@ export default function AppStateProvider(
   const [settings, dispatchSetting] = useReducer(settingsReducer, initialSettings);
   const [isSignedIn, setSignedIn] = useState(false);
   const [email, setEmail] = useState('');
-  
+  const [avatar, setAvatar] = useState('warrior');
   const contextValue = {
     isSignedIn,
     setSignedIn,
@@ -76,6 +78,8 @@ export default function AppStateProvider(
     highlightedProfiles: props.highlightedProfiles,
     email,
     setEmail,
+    avatar,
+    setAvatar,
   } as StateContextType;
 
   const getToken: StateContextType['getToken'] = room => {

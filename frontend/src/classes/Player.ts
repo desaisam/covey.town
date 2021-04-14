@@ -7,8 +7,7 @@ export default class Player {
 
   private readonly _userName: string;
 
-  private avatars = ['granny', 'cooldude', 'barmaid', 'monk', 'professor'];
-
+  
   private readonly _avatar: string;
 
   public sprite?: Phaser.Types.Physics.Arcade.SpriteWithDynamicBody;
@@ -19,7 +18,7 @@ export default class Player {
     this._id = id;
     this._userName = userName;
     this.location = location;
-    this._avatar = this.avatars[Math.floor(Math.random()*this.avatars.length)];
+    this._avatar = avatar;
   }
 
   get userName(): string {

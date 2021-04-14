@@ -28,5 +28,5 @@ export type CoveyAppState = {
   emitMovement: (location: UserLocation) => void,
   socket: Socket | null,
   apiClient: TownsServiceClient,
-  myPlayerAvatar: string,
 };
+

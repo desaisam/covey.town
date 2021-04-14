@@ -7,22 +7,18 @@ import { useAppState } from '../VideoCall/VideoFrontend/state';
 
 export default function AvatarModal({name, selection}){
 const { onOpen, isOpen, onClose } = useDisclosure()
-const { apiClient, avatar, myPlayerID } = useCoveyAppState();
-const { email } = useAppState();
-const [currentAvatar, setAvatar] = useState(avatar);
+const { apiClient, myPlayerID } = useCoveyAppState();
+const {email , setEmail, avatar, setAvatar} = useAppState();;
+
 const toast = useToast();
 
-const onClickYes = value => () => {
+const onClickYes = value => async () => {
     // Set the perty of player 
-    console.log(`Pusing ${value} api.ChangeAvatar : /userId/${myPlayerID}/avatar/${value}`);
-    console.log(`Value ${value}`);
-    console.log(`Current Avatar ${currentAvatar}`);
     setAvatar(value);
-    console.log(`You have Selected ${currentAvatar}`)
     console.log(`Inside avatar Modal the email is : ${ email }`);
     try {
-      // Uncomment below when the backendd is ready
-      // apiClient.changeAvatar({avatar : value, userId : '123'});
+      console.log(`Making a post request ${avatar}`);
+      await apiClient.setAvatarForUser({avatar : value,email});
       
       toast({
         title: 'Avatar Changed Sucessfully',

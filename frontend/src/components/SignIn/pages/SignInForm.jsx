@@ -18,7 +18,7 @@ import { useAppState } from '../../VideoCall/VideoFrontend/state';
 
 export default function SignIn() {
   const {isSignedIn, setSignedIn} = useAppState();
-  const {email , setEmail} = useAppState();
+  const {email , setEmail, avatar, setAvatar} = useAppState();
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
   const [isLoading, setIsLoading] = useState(false);
@@ -29,7 +29,9 @@ export default function SignIn() {
   const handleSubmit = async () => {
     const response = await apiClient.handleLoginSubmit({ email, password });
     if (response.isSuccess === true) {
-
+      const myavatar = await apiClient.getAvatarForUser({email});
+      console.log(`Avatar for this user ${myavatar}`);
+      setAvatar(myavatar);
       setSignedIn(true);
       console.log(`Signed In ${isSignedIn}`);
       history.replace('/');

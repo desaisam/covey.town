@@ -46,7 +46,6 @@ type CoveyAppUpdate =
         socket: Socket;
         players: Player[];
         emitMovement: (location: UserLocation) => void;
-        myPlayerAvatar : string;
       };
     }
   | { action: 'addPlayer'; player: Player }
@@ -74,7 +73,6 @@ function defaultAppState(): CoveyAppState {
     },
     emitMovement: () => {},
     apiClient: new TownsServiceClient(),
-    myPlayerAvatar : 'barmaid',
   };
 }
 function appStateReducer(state: CoveyAppState, update: CoveyAppUpdate): CoveyAppState {
@@ -91,9 +89,8 @@ function appStateReducer(state: CoveyAppState, update: CoveyAppUpdate): CoveyApp
     socket: state.socket,
     emitMovement: state.emitMovement,
     apiClient: state.apiClient,
-    myPlayerAvatar : state.myPlayerAvatar,
   };
-
+ 
   function calculateNearbyPlayers(players: Player[], currentLocation: UserLocation) {
     const isWithinCallRadius = (p: Player, location: UserLocation) => {
       if (p.location && location) {
@@ -126,7 +123,6 @@ function appStateReducer(state: CoveyAppState, update: CoveyAppUpdate): CoveyApp
       nextState.emitMovement = update.data.emitMovement;
       nextState.socket = update.data.socket;
       nextState.players = update.data.players;
-      nextState.myPlayerAvatar = update.data.myPlayerAvatar;
       break;
     case 'addPlayer':
       nextState.players = nextState.players.concat([update.player]);
@@ -227,7 +223,6 @@ async function GameController(
       emitMovement,
       socket,
       players: initData.currentPlayers.map(sp => Player.fromServerPlayer(sp)),
-      myPlayerAvatar : myAvatar,
     },
   });
   return true;
