@@ -591,6 +591,23 @@ describe('TownsServiceAPIREST', () => {
       expect(response2.avatar)
       .toBe("granny");
     });
+    it('User should NOT be able to set an avatar without registering first', async () => {
+            
+      // Change the avatar without registering
+      const query2 = `
+      mutation {
+        setAvatarForUser(email: newUser@domain.com, avatar: "granny") {
+          isSuccess,
+          email,
+          avatar
+        }
+      }
+    `;
+      // Make api call here
+      const response2 = await apiClient.setAvatarForUser(query2);
+      expect(response2.isSuccess)
+      .toBe(false);      
+    });
   });
 
   describe('GetAvatarAPI', () => {
@@ -651,6 +668,23 @@ describe('TownsServiceAPIREST', () => {
       const response3 = await apiClient.getAvatarForUser(query3);
       expect(response3.avatar)
       .toBe("granny");
+    });
+    it('New User should NOT be able to retrieve avatar without registering first', async () => {
+      
+      // Get the new Avatar
+      const query3 = `
+      query {
+        getAvatarForUser(email: newUser@domain.com") {
+          isSuccess,
+          email,
+          avatar
+        }
+      }
+    `;
+      // Make api call here
+      const response3 = await apiClient.getAvatarForUser(query3);
+      expect(response3.isSuccess)
+      .toBe(false);
     });
   });
 });
