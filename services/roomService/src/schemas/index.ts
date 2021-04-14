@@ -27,13 +27,20 @@ const RootQuery = new GraphQLObjectType({
         try {
           if (args.email) {
             const user = await getUserFromEmail(args.email);
-            const avatar = user.avatar;
-            if (avatar) {
-              return {
-                isSuccess: true,
-                email: args.email,
-                avatar
+            if (user) { // user found
+              const avatar = user.avatar;
+              if (avatar) {
+                return {
+                  isSuccess: true,
+                  email: args.email,
+                  avatar
+                }
               }
+            }
+            else{ // no user with matching email found
+              return {
+                isSuccess: false
+              }              
             }
           }
           return {

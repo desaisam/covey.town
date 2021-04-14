@@ -114,6 +114,7 @@ export type RegisterResponseType = {
 }
 
 export interface ChangeAvatarRequest {
+  isSuccess:boolean;
   userId: string;
   avatar: string;
 }
@@ -123,6 +124,8 @@ export interface GetAvatarRequest {
 }
 
 export interface GetAvatarResponse {
+  isSuccess:boolean;
+  userId: string;
   avatar: string;
 }
 
@@ -178,21 +181,25 @@ export default class TownsServiceClient {
 
   async handleLoginSubmit(query: string): Promise<LoginResponseType> {
     const response = await this._axios.post('/graphql', { query });
+    console.log(`Checking response after login ${response}`);
     return response.data.data.loginUser;
   }
 
   async handleRegisterSubmit(query: string): Promise<RegisterResponseType> {
     const response = await this._axios.post('/graphql', { query });
+    console.log(`Checking response after registration ${response}`);
     return response.data.data.registerUser;
   }
 
   async setAvatarForUser(query: string): Promise<ChangeAvatarRequest> {
     const response = await this._axios.post('/graphql', { query });
+    console.log(`Checking response after set avatar ${response}`);
     return response.data.data.registerUser;
   }
 
   async getAvatarForUser(query: string): Promise<GetAvatarResponse> {
     const response = await this._axios.post('/graphql', { query });
+    console.log(`Checking response after get avatar ${response}`);
     return response.data.data.registerUser;
   }
 }
