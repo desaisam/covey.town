@@ -1,9 +1,11 @@
 import axios, { AxiosInstance, AxiosResponse } from 'axios';
 import assert from 'assert';
 import { UserLocation } from '../CoveyTypes';
+import { RegisterResponseType } from '../schemas/typedefs/RegisterResponseType';
+import { LoginResponseType } from '../schemas/typedefs/LoginResponseType';
 
 
-export type ServerPlayer = { _id: string, _userName: string, location: UserLocation };
+export type ServerPlayer = { _id: string, _userName: string, location: UserLocation, avatar: string };
 
 /**
  * The format of a request to join a Town in Covey.Town, as dispatched by the server middleware
@@ -34,6 +36,8 @@ export interface TownJoinResponse {
   friendlyName: string;
   /** Is this a private town? * */
   isPubliclyListed: boolean;
+
+
 }
 
 /**
@@ -95,6 +99,38 @@ export type CoveyTownInfo = {
   maximumOccupancy: number
 };
 
+export type LoginResponseType = {
+  isSuccess:boolean;
+  message:string;
+  name:string;
+  email:string;
+  avatar:string;
+}
+
+export type RegisterResponseType = {
+  isSuccess:boolean;
+  message:string;
+  name:string;
+  email:string;
+  avatar:string;
+}
+
+export interface ChangeAvatarRequest {
+  isSuccess:boolean;
+  userId: string;
+  avatar: string;
+}
+
+export interface GetAvatarRequest {
+  userId: string | undefined;
+}
+
+export interface GetAvatarResponse {
+  isSuccess:boolean;
+  userId: string;
+  avatar: string;
+}
+
 export default class TownsServiceClient {
   private _axios: AxiosInstance;
 
@@ -145,4 +181,27 @@ export default class TownsServiceClient {
     return TownsServiceClient.unwrapOrThrowError(responseWrapper);
   }
 
+  async handleLoginSubmit(query: string): Promise<LoginResponseType> {
+    const response = await this._axios.post('/graphql', { query });
+    console.log(`Checking response after login ${response}`);
+    return response.data.data.loginUser;
+  }
+
+  async handleRegisterSubmit(query: string): Promise<RegisterResponseType> {
+    const response = await this._axios.post('/graphql', { query });
+    console.log(`Checking response after registration ${response}`);
+    return response.data.data.registerUser;
+  }
+
+  async setAvatarForUser(query: string): Promise<ChangeAvatarRequest> {
+    const response = await this._axios.post('/graphql', { query });
+    console.log(`Checking response after set avatar ${response}`);
+    return response.data.data.registerUser;
+  }
+
+  async getAvatarForUser(query: string): Promise<GetAvatarResponse> {
+    const response = await this._axios.post('/graphql', { query });
+    console.log(`Checking response after get avatar ${response}`);
+    return response.data.data.registerUser;
+  }
 }

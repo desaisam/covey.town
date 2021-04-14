@@ -11,8 +11,20 @@ import {
   townUpdateHandler,
 } from '../requestHandlers/CoveyTownRequestHandlers';
 import { logError } from '../Utils';
+import { graphqlHTTP } from 'express-graphql';
+import { schema } from '../schemas/index'
 
 export default function addTownRoutes(http: Server, app: Express): io.Server {
+
+  // Testing graphql route
+  app.use(
+    "/graphql",
+    graphqlHTTP({
+      schema,
+      graphiql: true,
+    })
+  );
+
   /*
    * Create a new session (aka join a town)
    */
@@ -21,6 +33,7 @@ export default function addTownRoutes(http: Server, app: Express): io.Server {
       const result = await townJoinHandler({
         userName: req.body.userName,
         coveyTownID: req.body.coveyTownID,
+        avatar: req.body.avatar,
       });
       res.status(StatusCodes.OK)
         .json(result);

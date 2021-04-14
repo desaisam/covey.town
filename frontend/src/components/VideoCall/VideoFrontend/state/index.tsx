@@ -1,19 +1,21 @@
-import React, {
-  createContext, useContext, useReducer, useState,
-} from 'react';
+import React, { createContext, useContext, useReducer, useState } from 'react';
 import { TwilioError } from 'twilio-video';
-import assert from 'assert';
+import { VideoRoom } from '../../../../CoveyTypes';
 import { RoomType } from '../types';
 import {
-  settingsReducer, initialSettings, Settings, SettingsAction,
+  initialSettings,
+  Settings,
+  SettingsAction,
+  settingsReducer,
 } from './settings/settingsReducer';
-import { VideoRoom } from '../../../../CoveyTypes';
 
 export interface StateContextType {
+  isSignedIn: boolean;
+  setSignedIn(isSignedIn: boolean): void;
   error: TwilioError | null;
   setError(error: TwilioError | null): void;
   getToken(
-    room: VideoRoom
+    room: VideoRoom,
   ): Promise<{
     token: string | null;
     expiry: Date | null;
@@ -29,6 +31,11 @@ export interface StateContextType {
   toggleWidth(): void;
   preferredMode: 'sidebar' | 'fullwidth';
   highlightedProfiles: string[];
+  email : string;
+  setEmail(email : string): void;
+  avatar : string;
+  setAvatar(avatar : string) : void;
+  
 }
 
 export const StateContext = createContext<StateContextType>(null!);
@@ -53,8 +60,12 @@ export default function AppStateProvider(
   const [isFetching, setIsFetching] = useState(false);
   const [activeSinkId, setActiveSinkId] = useState('default');
   const [settings, dispatchSetting] = useReducer(settingsReducer, initialSettings);
-
+  const [isSignedIn, setSignedIn] = useState(false);
+  const [email, setEmail] = useState('');
+  const [avatar, setAvatar] = useState('warrior');
   const contextValue = {
+    isSignedIn,
+    setSignedIn,
     error,
     setError,
     isFetching,
@@ -65,24 +76,32 @@ export default function AppStateProvider(
     toggleWidth: props.toggleWidth ?? (() => {}),
     preferredMode: props.preferredMode,
     highlightedProfiles: props.highlightedProfiles,
+    email,
+    setEmail,
+    avatar,
+    setAvatar,
   } as StateContextType;
 
-  const getToken: StateContextType['getToken'] = (room) => {
+  const getToken: StateContextType['getToken'] = room => {
     setIsFetching(true);
     return contextValue
       .getToken(room)
-      .then((res) => {
+      .then(res => {
         setIsFetching(false);
         return res;
       })
-      .catch((err) => {
+      .catch(err => {
         setError(err);
         setIsFetching(false);
         return Promise.reject(err);
       });
   };
 
-  return <StateContext.Provider value={{ ...contextValue, getToken }}>{props.children}</StateContext.Provider>;
+  return (
+    <StateContext.Provider value={{ ...contextValue, getToken }}>
+      {props.children}
+    </StateContext.Provider>
+  );
 }
 
 export function useAppState() {

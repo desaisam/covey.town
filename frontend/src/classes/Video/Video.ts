@@ -16,6 +16,8 @@ export default class Video {
 
   private _userName: string;
 
+  private _coveyUserID: string | undefined;
+
   private townsServiceClient: TownsServiceClient = new TownsServiceClient();
 
   private _coveyTownID: string;
@@ -24,13 +26,16 @@ export default class Video {
 
   private _isPubliclyListed: boolean | undefined;
 
+  private _avatar: string;
+
   pauseGame: () => void = ()=>{};
 
   unPauseGame: () => void = ()=>{};
 
-  constructor(userName: string, coveyTownID: string) {
+  constructor(userName: string, coveyTownID: string, avatar: string) {
     this._userName = userName;
     this._coveyTownID = coveyTownID;
+    this._avatar = avatar;
   }
 
   get isPubliclyListed(): boolean {
@@ -48,8 +53,16 @@ export default class Video {
     return this._userName;
   }
 
+  get coveyUserID(): string | undefined {
+    return this._coveyUserID;
+  }
+
   get coveyTownID(): string {
     return this._coveyTownID;
+  }
+
+  get avatar(): string {
+    return this._avatar;
   }
 
   private async setup(): Promise<TownJoinResponse> {
@@ -59,12 +72,14 @@ export default class Video {
         this.townsServiceClient.joinTown({
           coveyTownID: this._coveyTownID,
           userName: this._userName,
+          avatar: this._avatar,
         })
           .then((result) => {
             this.sessionToken = result.coveySessionToken;
             this.videoToken = result.providerVideoToken;
             this._townFriendlyName = result.friendlyName;
             this._isPubliclyListed = result.isPubliclyListed;
+            this._coveyUserID = result.coveyUserID;
             resolve(result);
           })
           .catch((err) => {
@@ -98,11 +113,11 @@ export default class Video {
     return this.teardownPromise ?? Promise.resolve();
   }
 
-  public static async setup(username: string, coveyTownID: string): Promise<TownJoinResponse> {
+  public static async setup(username: string, coveyTownID: string, avatar: string): Promise<TownJoinResponse> {
     let result = null;
 
     if (!Video.video) {
-      Video.video = new Video(username, coveyTownID);
+      Video.video = new Video(username, coveyTownID, avatar);
     }
 
     try {

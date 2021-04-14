@@ -13,6 +13,9 @@ export interface TownJoinRequest {
   userName: string;
   /** ID of the town that the player would like to join * */
   coveyTownID: string;
+
+  /** Avatar of the player that would like to join * */
+  avatar: string;
 }
 
 /**
@@ -106,7 +109,8 @@ export async function townJoinHandler(requestData: TownJoinRequest): Promise<Res
       message: 'Error: No such town',
     };
   }
-  const newPlayer = new Player(requestData.userName);
+  // Use user name to look 
+  const newPlayer = new Player(requestData.userName, requestData.avatar);
   const newSession = await coveyTownController.addPlayer(newPlayer);
   assert(newSession.videoToken);
   return {
