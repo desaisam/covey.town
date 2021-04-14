@@ -46,7 +46,7 @@ return (
             boxSize="2rem"
             borderRadius="full"
             src= { `${process.env.PUBLIC_URL} /assets/bardmaid.jpg`}
-            alt="Barmaid"
+            alt="CoolDude"
             mr="12px"
           />
           <AvatarModal name = "Barmaid" selection ="barmaid"/>

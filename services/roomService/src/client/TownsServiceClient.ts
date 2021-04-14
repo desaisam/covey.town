@@ -5,7 +5,7 @@ import { RegisterResponseType } from '../schemas/typedefs/RegisterResponseType';
 import { LoginResponseType } from '../schemas/typedefs/LoginResponseType';
 
 
-export type ServerPlayer = { _id: string, _userName: string, location: UserLocation };
+export type ServerPlayer = { _id: string, _userName: string, location: UserLocation, avatar: string };
 
 /**
  * The format of a request to join a Town in Covey.Town, as dispatched by the server middleware
@@ -36,6 +36,8 @@ export interface TownJoinResponse {
   friendlyName: string;
   /** Is this a private town? * */
   isPubliclyListed: boolean;
+
+
 }
 
 /**

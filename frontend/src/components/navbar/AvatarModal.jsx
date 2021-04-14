@@ -39,7 +39,7 @@ const onClickYes = value => async () => {
     
 }
 
-  console.log(`You have Selected Outside ${avatar}`)
+  // console.log(`You have Selected Outside ${avatar}`)
   return (
     <>
      
