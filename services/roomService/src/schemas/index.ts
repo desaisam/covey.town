@@ -5,19 +5,17 @@ import SigninResponseType from './typedefs/LoginResponseType';
 import RegisterResponseType from './typedefs/RegisterResponseType';
 import SetAvatarForUserResponse from './typedefs/SetAvatarForUserResponse';
 
-export interface GetUserForEmailResponse {
+export interface GetUserResponse {
   avatar: string;
-}
-
-export interface GetExistingUserResponse {
-  name: string;
   email: string;
+  name: string;
+  password: string;
 }
 
-async function getUserFromEmail(email: string): Promise<GetUserForEmailResponse> {
+async function getUserFromEmail(email: string): Promise<GetUserResponse> {
   const response = await pool.query('SELECT * FROM userdata');
   const data = response.rows;
-  const registerdUser = data.find(user => user.email === email);
+  const registerdUser = data.find((user: GetUserResponse) => user.email === email);
   return registerdUser;
 }
 
@@ -67,17 +65,19 @@ const RootQuery = new GraphQLObjectType({
 async function checkIfUserAlreadyExists(email: string): Promise<boolean> {
   const response = await pool.query('SELECT * FROM userdata');
   const data = response.rows;
-  const userFound = data.find(user => user.email === email);
+  const userFound = data.find((user: GetUserResponse) => user.email === email);
   if (userFound) {
     return true;
   }
   return false;
 }
 
-async function getExistingUser(email: string, password: string): Promise<GetExistingUserResponse> {
+async function getExistingUser(email: string, password: string): Promise<GetUserResponse> {
   const response = await pool.query('SELECT * FROM userdata');
   const data = response.rows;
-  const existingUser = data.find(user => user.email === email && user.password === password);
+  const existingUser = data.find(
+    (user: GetUserResponse) => user.email === email && user.password === password,
+  );
   return existingUser;
 }
 
