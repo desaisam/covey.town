@@ -165,6 +165,14 @@ const Mutation = new GraphQLObjectType({
       },
       async resolve(_, args) {
         try {
+          // First check if user already registered
+          const userExists = await checkIfUserAlreadyExists(args.email);
+          if (!userExists) {
+            return {
+              isSuccess: false,
+            };
+          }
+
           await pool.query('update userdata set avatar=($1) where email=($2)', [
             args.avatar,
             args.email,
