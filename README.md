@@ -6,7 +6,7 @@ Covey.Town was built for Northeastern's [Spring 2021 software engineering course
 
 You can view our reference deployment of the app at [app.covey.town](https://app.covey.town/).
 
-[Covey.Town Architecture](https://drive.google.com/file/d/1D4JqCSmCvx0U0ycHBG5kasPF_k9cUEuv/view?usp=sharing)
+![Covey.Town Architecture](docs/covey-town-architecture.jpeg)
 
 The figure above depicts the high-level architecture of Covey.Town.
 
