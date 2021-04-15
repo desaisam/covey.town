@@ -16,6 +16,9 @@ const pool = new Pool({
   database: 'dfupuj37diulh',
   host: 'ec2-34-225-167-77.compute-1.amazonaws.com',
   port: 5432,
+  ssl: {
+    rejectUnauthorized: false,
+  },
 });
 
 export default pool;
