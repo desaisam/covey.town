@@ -21,7 +21,7 @@ export default function ChangeAvatar() : JSX.Element{
           <Image
             size='2rem'
             borderRadius='full'
-            src={`${process.env.PUBLIC_URL} /assets/cooldude50.jpg`}
+            src={`${process.env.PUBLIC_URL} /assets/cooldude.jpg`}
             alt='Fluffybuns the destroyer'
             mr='12px'
           />
