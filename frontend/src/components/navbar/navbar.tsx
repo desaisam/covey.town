@@ -8,9 +8,6 @@ import {
   Button,
   Menu,
   MenuButton,
-  MenuList,
-  MenuItem,
-  MenuDivider,
   useDisclosure,
   useColorModeValue,
   Stack,
@@ -30,13 +27,14 @@ import ChangeAvatar from './ChangeAvatarMenu';
 
 export default function NavBar(): JSX.Element {
   const { isOpen, onOpen, onClose } = useDisclosure();
-  const { isSignedIn, setSignedIn, avatar } = useAppState();
+  const { isSignedIn, setSignedIn, avatar, setAvatar } = useAppState();
   const toast = useToast();
   const history = useHistory();
   const onClickSignIn = () => history.push('/signin');
   const onClickSignUp = () => history.push('/signup');
   const onClickSignOut = () => {
     setSignedIn(false);
+    setAvatar('warrior');
     history.push('/');
     toast({
       title: `Log out Successful`,
