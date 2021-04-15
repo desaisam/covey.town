@@ -187,7 +187,7 @@ export default class TownsServiceClient {
 
   async handleRegisterSubmit(query: string): Promise<RegisterResponseType> {
     const response = await this._axios.post('/graphql', { query });
-    console.log(`Checking response after registration ${response}`);
+    console.log(`Checking response after registration ${response.data.data.registerUser.isSuccess}`);
     return response.data.data.registerUser;
   }
 
