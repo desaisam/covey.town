@@ -29,8 +29,7 @@ const RootQuery = new GraphQLObjectType({
       args: {
         email: { type: GraphQLString },
       },
-      async resolve(parent, args) {
-        const nousage = parent;
+      async resolve(_, args) {
         try {
           if (args.email) {
             const user = await getUserFromEmail(args.email);
@@ -92,9 +91,8 @@ const Mutation = new GraphQLObjectType({
         email: { type: GraphQLString },
         password: { type: GraphQLString },
       },
-      async resolve(parent, args) {
+      async resolve(_, args) {
         try {
-          const nousage = parent;
           // First check if user already registered
           const userExists = await checkIfUserAlreadyExists(args.email);
           if (userExists) {
@@ -132,9 +130,8 @@ const Mutation = new GraphQLObjectType({
         email: { type: GraphQLString },
         password: { type: GraphQLString },
       },
-      async resolve(parent, args) {
+      async resolve(_, args) {
         try {
-          const nousage = parent;
           // First check if user registered or not
           const user = await getExistingUser(args.email, args.password);
           if (user === undefined) {
@@ -166,8 +163,7 @@ const Mutation = new GraphQLObjectType({
         email: { type: GraphQLString },
         avatar: { type: GraphQLString },
       },
-      async resolve(parent, args) {
-        const nousage = parent;
+      async resolve(_, args) {
         try {
           await pool.query('update userdata set avatar=($1) where email=($2)', [
             args.avatar,
