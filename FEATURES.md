@@ -1,110 +1,32 @@
-# Covey.Town Design
+# New Features in Covey.Town
 
-The following is the high level architechture, of the covey.town, which highlights the new features that have been added.
+Hello there!
+So in this release, we have added real-time persistence to the existing Covey.Town App using Postgres + GraphQL as the backend database stack. The main motivation behind introducing such a real-time persistence into the covey.town app was to separate out the data storage and handling, from the main businiss logic in the covey.town code.
 
-![Covey.Twon Architechture](https://drive.google.com/file/d/1D4JqCSmCvx0U0ycHBG5kasPF_k9cUEuv/view?usp=sharing)
+With this implemented, it paves way for new exciting features to be added to the application including Signing-in (or registering) as a first time user, Logging-in as a returning user, selecting new Avatar before entering a room from a list of available avatars and saving this preference for all future logins into the applications. Some more details about each of the above features can be found below.
 
-The interactions between these features have been explained below using various sequence diagrams.
+# Sign-up
 
-## UML diagrams
+As a first-time user visiting our app, he/she needs is able to sign up on the platform so that his/her profile and preferences are saved with the app.
 
-### 1. Registering as a new User
+- Users are able to easily locate and sign up using their email, name and password.
+- Prompts to enter the email and set the password are clearly distinguishable and visible.
+- Once registered successfully, the user is taken back to login page and is notified to login instead of signing up again.
+- After successful sign up, users are able to see the details that are associated with their accounts on the home page.
 
-```mermaid
+# Login
 
-sequenceDiagram
+As an already existing user who has previously registered on the platform, he/she need is able to log in on covey.town so that he/she is able to see their stored preferences every time they login to use the app.
 
-Home Page -->> Register Page: Click on "Register"
+- Users are be able to easily locate and log in using their email and password.
+- If not already registered or invalid credentials, covey.town notifies the users with a proper message indicating that their credentials are wrong and are reminded to register first if they haven't done it yet.
+- After successful login, users are able to see the details that are associated with their accounts.
 
-Register Page-->>Login Page: Click on "Sign Up"
+# Avatar
 
-Login Page-->>Home Page: Click on "Sign In"
+An exciting new feature that has been added to Covey.town is that users can finally change the appearance of their characters. We have provided a total of 6 different avatars to choose from for the user such as `Barmaid, Warrioir, Granny, Cooldude, Monk and Scientist`. For using this functionality, the user needs to first sign-up (or register) on the platform first so that he can access this feature.
 
+As an already existing user who has previously registered on the platform, he/she is able to choose a custom avatar according to their likes. This avatar is visible while using covey.town and the app saves this preference for future logins.
 
-
-Note right of Register Page: Register page has <br/> input boxes where <br/> the user can enter <br/> their details.
-
-Note right of Login Page: Login page has <br/> input boxes where <br/> the user can enter <br/> their email and password.
-
-Note right of Home Page: Now the user will <br/> be logged in and <br/> is ready to join a room. <br/> The user can now <br/> also choose a new avatar <br/> from the drop down <br/> at the top right
-
-
-
-```
-
-### 2. Logging-in as an existing User
-
-```mermaid
-
-sequenceDiagram
-
-Home Page -->> Login Page: Click on "Log In"
-
-Login Page-->>Home Page: Click on "Sign In"
-
-
-
-Note right of Login Page: Login page has <br/> input boxes where <br/> the user can enter <br/> their email and password.
-
-Note right of Home Page: Now the user will <br/> be logged in and <br/> is ready to join a room. <br/> The user can now <br/> also choose a new avatar <br/> from the drop down <br/> at the top right
-
-
-
-```
-
-### Choosing an Avatar as a logged-in User
-
-```mermaid
-
-sequenceDiagram
-
-Home Page -->> Login Page: Click on "Login"
-
-Login Page-->>Home Page: Click on "Sign In"
-
-Home Page-->>Home Page: Click on "Choose Avatar"
-
-Home Page-->>Room Page: Click on "Join Room" or "Create a new Room"
-
-
-
-Note right of Login Page: Login page has <br/> input boxes where <br/> the user can enter <br/> their email and password.
-
-Note right of Home Page: Now the user will <br/> be logged in and <br/> is ready to join a room.
-
-Note right of Room Page: Now the user will <br/> be logged and is <br/> inside a room.
-
-```
-
-Overall, this is how the whole authentication process will look like:
-
-```mermaid
-
-graph LR
-
-A(Home) -- If not registered --> B(Register)
-
-B --> C(Login)
-
-C --> D(Home)
-
-A -- If already registered --> C
-
-D --> E((Room))
-
-```
-
-## Changes made in the codebase:
-
-The following changes have been made in the `components` directory:
-
-1. **Log-In** Related: `SignInForm.tsx [Route: /signin]` inside the `pages` directory.
-
-2. **Sign-Up** (Registration) Related: `SignUpForm.tsx [Route: /signup]` inside the `pages` directory.
-
-3. The state of whether a particular users is signed in has been maintained inside the `useAppState` so that it is accessible on all the pages.
-
-4. Added new interfaces: `UserLoginRequest`, `UserRegistrationRequest`, `SetAvatarRequest`, `UserLoginResponse`, `GetAvatarRequest`, `GetAvatarResponse`, `UserRegistrationResponse` and new service methods in `TownServiceClient.ts`
-
-5. Added new files: `AvatarModal.tsx` and `ChangeAvatarMenu.tsx` and `navbar.tsx` in the `navbar` directory.
-6. **Avatar** Related:
+- Users is able to easily locate the functionality to choose an Avatar.
+- The Avatar the user chose is persisted and associated with his entry in the database, so that it is already chosen the next time the user logs in.
