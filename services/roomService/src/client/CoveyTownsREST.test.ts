@@ -234,43 +234,31 @@ describe('TownsServiceAPIREST', () => {
 
   describe('CoveyRegistrationAPI', () => {
     describe('CoveyRegistrationAPI', () => {
-      it('New user should be able to register with valid username, email and password', async () => {
-      });
-      it('User should NOT be able to register with a previously registered email', async () => {
-      });
-      it('Two users with same names but different email can register', async () => {
-      });
+      it('New user should be able to register with valid username, email and password', async () => {});
+      it('User should NOT be able to register with a previously registered email', async () => {});
+      it('Two users with same names but different email can register', async () => {});
     });
 
     describe('CoveyLoginAPI', () => {
-      it('Exisiting User should be able to login with valid credentials', async () => {
-      });
+      it('Exisiting User should be able to login with valid credentials', async () => {});
 
-      it('Exisiting User should NOT be able to login with both invalid credentials', async () => {
-      });
+      it('Exisiting User should NOT be able to login with both invalid credentials', async () => {});
 
-      it('Exisiting User should NOT be able to login with invalid username, but valid password', async () => {
-      });
+      it('Exisiting User should NOT be able to login with invalid username, but valid password', async () => {});
 
-      it('Exisiting User should NOT be able to login with valid username, invalid password', async () => {
-      });
+      it('Exisiting User should NOT be able to login with valid username, invalid password', async () => {});
 
-      it('New User should NOT be able to login without registering', async () => {
-      });
+      it('New User should NOT be able to login without registering', async () => {});
     });
 
     describe('SetAvatarAPI', () => {
-      it('User should be able to set or change his/her new avatar', async () => {
-      });
-      it('User should NOT be able to set an avatar without registering first', async () => {
-      });
+      it('User should be able to set or change his/her new avatar', async () => {});
+      it('User should NOT be able to set an avatar without registering first', async () => {});
     });
 
     describe('GetAvatarAPI', () => {
-      it('User should be able to retrieve the newly set avatar from the database', async () => {
-      });
-      it('New User should NOT be able to retrieve avatar without registering first', async () => {
-      });
+      it('User should be able to retrieve the newly set avatar from the database', async () => {});
+      it('New User should NOT be able to retrieve avatar without registering first', async () => {});
     });
   });
 });
