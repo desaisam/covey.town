@@ -40,7 +40,7 @@ class CoveyGameScene extends Phaser.Scene {
 
   constructor(video: Video, emitMovement: (loc: UserLocation) => void, avatar : string) {
     super('PlayGame');
-    console.log(`Inside COnstructor ${avatar}`);
+    // console.log(`Inside COnstructor ${avatar}`);
     
     this.video = video;
     this.emitMovement = emitMovement;
@@ -64,13 +64,16 @@ class CoveyGameScene extends Phaser.Scene {
       this.players = players;
       return;
     }
+
+    console.log(`Now iterating each player`);
+
     players.forEach((p) => {
-      // console.log(`Updating Players location ${p.avatar} Id : ${p.userName}`);
+      console.log(`Player Name : ${p.userName} , Player Avatar : ${p.avatar}`);
       
       this.updatePlayerLocation(p);
-      console.log("updating player anims");
+      // console.log("updating player anims");
       
-      this.updatePlayerAnims(p);
+      // this.updatePlayerAnims(p);
     });
     // Remove disconnected players from board
     const disconnectedPlayers = this.players.filter(
@@ -93,8 +96,8 @@ class CoveyGameScene extends Phaser.Scene {
   }
 
   updatePlayerLocation(player: Player) {
-    console.log(`Updating player ${player.userName}`);
-    console.log(`He has an avatar ${player.avatar}`);
+    // console.log(`Updating player ${player.userName}`);
+    // console.log(`He has an avatar ${player.avatar}`);
     
     let myPlayer = this.players.find((p) => p.id === player.id);
     if (!myPlayer) {
@@ -108,11 +111,13 @@ class CoveyGameScene extends Phaser.Scene {
         }; 
       }
       myPlayer = new Player(player.id, player.userName, location,player.avatar);
+      console.log(`My Player ${myPlayer.userName}, Avatar ${myPlayer.avatar}`);
+      
       this.players.push(myPlayer);
     }
     
     if (this.id !== myPlayer.id && this.physics && player.location) {
-      console.log(`player location update with id: ${player.id}, name: ${player.userName} and avatar: ${player.avatar}`);
+      // console.log(`player location update with id: ${player.id}, name: ${player.userName} and avatar: ${player.avatar}`);
 
       let { sprite } = myPlayer;
       if (!sprite) {
@@ -217,7 +222,7 @@ class CoveyGameScene extends Phaser.Scene {
     if (this.paused) {
       return;
     }
-    console.log(`In update: id is: ${this.id} and avatar is: ${this.avatar}`);
+    // console.log(`In update: id is: ${this.id} and avatar is: ${this.avatar}`);
     if (this.player && this.cursors) {
       const speed = 175;
       const prevVelocity = this.player.sprite.body.velocity.clone();
@@ -520,7 +525,7 @@ export default function WorldMap(): JSX.Element {
     email,isSignedIn,avatar
   } = useAppState();
   const [gameScene, setGameScene] = useState<CoveyGameScene>();
-  console.log(`Getting from Global Staate ${avatar}`);
+  // console.log(`Getting from Global State ${avatar}`);
   useEffect(() => {
     
     const config = {

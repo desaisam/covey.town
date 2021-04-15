@@ -23,12 +23,16 @@ import useVideoContext from '../VideoCall/VideoFrontend/hooks/useVideoContext/us
 import Video from '../../classes/Video/Video';
 import { CoveyTownInfo, TownJoinResponse, } from '../../classes/TownsServiceClient';
 import useCoveyAppState from '../../hooks/useCoveyAppState';
+import { useAppState } from '../VideoCall/VideoFrontend/state/index';
 
 interface TownSelectionProps {
   doLogin: (initData: TownJoinResponse) => Promise<boolean>
 }
 
 export default function TownSelection({ doLogin }: TownSelectionProps): JSX.Element {
+  const {avatar} = useAppState();
+  console.log(`Avatar in Video Instance : ${avatar}`);
+  
   const [userName, setUserName] = useState<string>(Video.instance()?.userName || '');
   const [newTownName, setNewTownName] = useState<string>('');
   const [newTownIsPublic, setNewTownIsPublic] = useState<boolean>(true);
@@ -73,7 +77,7 @@ export default function TownSelection({ doLogin }: TownSelectionProps): JSX.Elem
         }); 
         return;
       }
-      const initData = await Video.setup(userName, coveyRoomID);
+      const initData = await Video.setup(userName, coveyRoomID, avatar);
 
       const loggedIn = await doLogin(initData);
       if (loggedIn) {

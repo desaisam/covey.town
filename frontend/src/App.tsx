@@ -125,6 +125,7 @@ function appStateReducer(state: CoveyAppState, update: CoveyAppUpdate): CoveyApp
       nextState.players = update.data.players;
       break;
     case 'addPlayer':
+      console.log(`Inside Add Player Case. My update player is ${JSON.stringify(update.player)}`);
       nextState.players = nextState.players.concat([update.player]);
       break;
     case 'playerMoved':
@@ -187,7 +188,6 @@ async function GameController(
   assert(video);
   const roomName = video.townFriendlyName;
   assert(roomName);
-  const myAvatar = 'granny'; // Some how from database Use one for each player
   const socket = io(url, { auth: { token: sessionToken, coveyTownID: video.coveyTownID } });
   socket.on('newPlayer', (player: ServerPlayer) => {
     dispatchAppUpdate({
