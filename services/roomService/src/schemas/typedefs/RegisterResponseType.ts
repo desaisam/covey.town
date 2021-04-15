@@ -1,7 +1,7 @@
-import { GraphQLObjectType, GraphQLString, GraphQLBoolean } from 'graphql';
+import { GraphQLBoolean, GraphQLObjectType, GraphQLString } from 'graphql';
 
-export const RegisterResponseType = new GraphQLObjectType({
-  name: "Register",
+const RegisterResponseType = new GraphQLObjectType({
+  name: 'Register',
   fields: () => ({
     isSuccess: { type: GraphQLBoolean },
     message: { type: GraphQLString },
@@ -10,3 +10,5 @@ export const RegisterResponseType = new GraphQLObjectType({
     avatar: { type: GraphQLString },
   }),
 });
+
+export default RegisterResponseType;

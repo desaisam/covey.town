@@ -241,30 +241,30 @@ describe('TownsServiceAPIREST', () => {
   describe('CoveyRegistrationAPI', () => {
     it('New user should be able to register with valid username, email and password', async () => {
 
-    const query = `
-      mutation {
-        registerUser(name: "admin", email: "admin@domain.com", password: "admin123") {
-          isSuccess,
-          message,
-          name,
-          email,
-          avatar
+      const query = `
+        mutation {
+          registerUser(name: "admin", email: "admin@domain.com", password: "admin123") {
+            isSuccess,
+            message,
+            name,
+            email,
+            avatar
+          }
         }
-      }
     `;
       // Make api call here
       const response = await apiClient.handleRegisterSubmit(query);
       // Verify response
       expect(response.isSuccess)
-      .toBe(true);
+        .toBe(true); 
       expect(response.message)
-      .toBe("Successfully registered!");
+        .toBe('Successfully registered!');
       expect(response.name)
-      .toBe("admin");
+        .toBe('admin');
       expect(response.email)
-      .toBe("admin@domain.com");
+        .toBe('admin@domain.com');
       expect(response.avatar)
-      .toBe('barmaid');
+        .toBe('barmaid');
     });
     it('User should NOT be able to register with a previously registered email', async () => {
 
@@ -280,21 +280,21 @@ describe('TownsServiceAPIREST', () => {
         }
       `;
         // Make api call here
-        const response = await apiClient.handleRegisterSubmit(query);
-        // Verify response
-        expect(response.isSuccess)
+      const response = await apiClient.handleRegisterSubmit(query);
+      // Verify response
+      expect(response.isSuccess)
         .toBe(true);
-        expect(response.message)
-        .toBe("Successfully registered!");
-        expect(response.name)
-        .toBe("admin");
-        expect(response.email)
-        .toBe("admin@domain.com");
-        expect(response.avatar)
+      expect(response.message)
+        .toBe('Successfully registered!');
+      expect(response.name)
+        .toBe('admin');
+      expect(response.email)
+        .toBe('admin@domain.com');
+      expect(response.avatar)
         .toBe('barmaid');
         
-        // Try to register a user with the same email
-        const query2 = `
+      // Try to register a user with the same email 
+      const query2 = `
         mutation {
           registerUser(name: "admin", email: "admin@domain.com", password: "admin123") {
             isSuccess,
@@ -306,13 +306,13 @@ describe('TownsServiceAPIREST', () => {
         }
       `;
         // Make api call here
-        const response2 = await apiClient.handleRegisterSubmit(query2);
-        // Verify response
-        expect(response2.isSuccess)
+      const response2 = await apiClient.handleRegisterSubmit(query2);
+      // Verify response
+      expect(response2.isSuccess)
         .toBe(false);
-        expect(response2.message)
+      expect(response2.message)
         .toBe('User already registered with this email. Please Login instead.');
-      });
+    });
   });
 
   describe('CoveyLoginAPI', () => {
@@ -334,15 +334,15 @@ describe('TownsServiceAPIREST', () => {
       const response = await apiClient.handleRegisterSubmit(query);
       // Verify response
       expect(response.isSuccess)
-      .toBe(true);
+        .toBe(true);
       expect(response.message)
-      .toBe("Successfully registered!");
+        .toBe('Successfully registered!');
       expect(response.name)
-      .toBe("admin");
+        .toBe('admin');
       expect(response.email)
-      .toBe("admin@domain.com");
+        .toBe('admin@domain.com');
       expect(response.avatar)
-      .toBe("barmaid");
+        .toBe('barmaid');
 
       // Login with that user
       const query2 = `
@@ -353,7 +353,7 @@ describe('TownsServiceAPIREST', () => {
           name,
           email,
           avatar
-        }
+          }
       }
     `;
 
@@ -361,13 +361,13 @@ describe('TownsServiceAPIREST', () => {
       const response2 = await apiClient.handleLoginSubmit(query2);
       // Verify response
       expect(response2.isSuccess)
-      .toBe(true);
+        .toBe(true);
       expect(response2.message)
-      .toBe('Successfully logged-in!');
+        .toBe('Successfully logged-in!');
       expect(response2.name)
-      .toBe("admin");
+        .toBe('admin');
       expect(response2.email)
-      .toBe("admin@domain.com");
+        .toBe('admin@domain.com');
     });
 
     it('Exisiting User should NOT be able to login with both invalid credentials', async () => {
@@ -386,17 +386,17 @@ describe('TownsServiceAPIREST', () => {
     `;
       // Make api call here
       const response = await apiClient.handleRegisterSubmit(query);
-      // Verify response
+      // Verify responsea
       expect(response.isSuccess)
-      .toBe(true);
+        .toBe(true);
       expect(response.message)
-      .toBe("Successfully registered!");
+        .toBe('Successfully registered!');
       expect(response.name)
-      .toBe("admin");
+        .toBe('admin');
       expect(response.email)
-      .toBe("admin@domain.com");
+        .toBe('admin@domain.com');
       expect(response.avatar)
-      .toBe("barmaid");
+        .toBe('barmaid');
 
       // Login with that user with invalid credentials
       const query2 = `
@@ -415,9 +415,9 @@ describe('TownsServiceAPIREST', () => {
       const response2 = await apiClient.handleLoginSubmit(query2);
       // Verify response
       expect(response2.isSuccess)
-      .toBe(false);
+        .toBe(false);
       expect(response2.message)
-      .toBe('Something went wrong. Please try again :(');
+        .toBe('Something went wrong. Please try again :(');
     });
 
     it('Exisiting User should NOT be able to login with invalid username, but valid password', async () => {
@@ -438,15 +438,15 @@ describe('TownsServiceAPIREST', () => {
       const response = await apiClient.handleRegisterSubmit(query);
       // Verify response
       expect(response.isSuccess)
-      .toBe(true);
+        .toBe(true);
       expect(response.message)
-      .toBe("Successfully registered!");
+        .toBe('Successfully registered!');
       expect(response.name)
-      .toBe("admin");
+        .toBe('admin');
       expect(response.email)
-      .toBe("admin@domain.com");
+        .toBe('admin@domain.com');
       expect(response.avatar)
-      .toBe("barmaid");
+        .toBe('barmaid');
 
       // Login with that user
       const query2 = `
@@ -465,9 +465,9 @@ describe('TownsServiceAPIREST', () => {
       const response2 = await apiClient.handleLoginSubmit(query2);
       // Verify response
       expect(response2.isSuccess)
-      .toBe(false);
+        .toBe(false);
       expect(response2.message)
-      .toBe('Something went wrong. Please try again :(');
+        .toBe('Something went wrong. Please try again :(');
     });
 
     it('Exisiting User should NOT be able to login with valid username, invalid password', async () => {
@@ -488,15 +488,15 @@ describe('TownsServiceAPIREST', () => {
       const response = await apiClient.handleRegisterSubmit(query);
       // Verify response
       expect(response.isSuccess)
-      .toBe(true);
+        .toBe(true);
       expect(response.message)
-      .toBe("Successfully registered!");
+        .toBe('Successfully registered!');
       expect(response.name)
-      .toBe("admin");
+        .toBe('admin');
       expect(response.email)
-      .toBe("admin@domain.com");
+        .toBe('admin@domain.com');
       expect(response.avatar)
-      .toBe("barmaid");
+        .toBe('barmaid');
 
       // Login with that user
       const query2 = `
@@ -515,9 +515,9 @@ describe('TownsServiceAPIREST', () => {
       const response2 = await apiClient.handleLoginSubmit(query2);
       // Verify response
       expect(response2.isSuccess)
-      .toBe(false);
+        .toBe(false);
       expect(response2.message)
-      .toBe('Something went wrong. Please try again :(');
+        .toBe('Something went wrong. Please try again :(');
     });
 
     it('New User should NOT be able to login without registering', async () => {
@@ -539,9 +539,9 @@ describe('TownsServiceAPIREST', () => {
       const response2 = await apiClient.handleLoginSubmit(query2);
       // Verify response
       expect(response2.isSuccess)
-      .toBe(false);
+        .toBe(false);
       expect(response2.message)
-      .toBe('Something went wrong. Please try again :(');
+        .toBe('Something went wrong. Please try again :(');
     });
   });
 
@@ -564,15 +564,15 @@ describe('TownsServiceAPIREST', () => {
       const response = await apiClient.handleRegisterSubmit(query);
       // Verify response
       expect(response.isSuccess)
-      .toBe(true);
+        .toBe(true);
       expect(response.message)
-      .toBe("Successfully registered!");
+        .toBe('Successfully registered!');
       expect(response.name)
-      .toBe("admin");
+        .toBe('admin');
       expect(response.email)
-      .toBe("admin@domain.com");
+        .toBe('admin@domain.com');
       expect(response.avatar)
-      .toBeDefined();
+        .toBeDefined();
       
       // Change the avatar
       const query2 = `
@@ -587,9 +587,9 @@ describe('TownsServiceAPIREST', () => {
       // Make api call here
       const response2 = await apiClient.setAvatarForUser(query2);
       expect(response2.userId)
-      .toBe("admin@domain.com");      
+        .toBe('admin@domain.com');      
       expect(response2.avatar)
-      .toBe("granny");
+        .toBe('granny');
     });
     it('User should NOT be able to set an avatar without registering first', async () => {
             
@@ -606,7 +606,7 @@ describe('TownsServiceAPIREST', () => {
       // Make api call here
       const response2 = await apiClient.setAvatarForUser(query2);
       expect(response2.isSuccess)
-      .toBe(false);      
+        .toBe(false);      
     });
   });
 
@@ -629,15 +629,15 @@ describe('TownsServiceAPIREST', () => {
       const response = await apiClient.handleRegisterSubmit(query);
       // Verify response
       expect(response.isSuccess)
-      .toBe(true);
+        .toBe(true);
       expect(response.message)
-      .toBe("Successfully registered!");
+        .toBe('Successfully registered!');
       expect(response.name)
-      .toBe("admin");
+        .toBe('admin');
       expect(response.email)
-      .toBe("admin@domain.com");
+        .toBe('admin@domain.com');
       expect(response.avatar)
-      .toBeDefined();
+        .toBeDefined();
       
       // Change the avatar
       const query2 = `
@@ -652,7 +652,7 @@ describe('TownsServiceAPIREST', () => {
       // Make api call here
       const response2 = await apiClient.setAvatarForUser(query2);
       expect(response2.avatar)
-      .toBe("granny");
+        .toBe('granny');
 
       // Get the new Avatar
       const query3 = `
@@ -667,7 +667,7 @@ describe('TownsServiceAPIREST', () => {
       // Make api call here
       const response3 = await apiClient.getAvatarForUser(query3);
       expect(response3.avatar)
-      .toBe("granny");
+        .toBe('granny');
     });
     it('New User should NOT be able to retrieve avatar without registering first', async () => {
       
@@ -684,7 +684,7 @@ describe('TownsServiceAPIREST', () => {
       // Make api call here
       const response3 = await apiClient.getAvatarForUser(query3);
       expect(response3.isSuccess)
-      .toBe(false);
+        .toBe(false);
     });
   });
 });

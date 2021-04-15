@@ -1,7 +1,7 @@
 import { GraphQLBoolean, GraphQLObjectType, GraphQLString } from 'graphql';
 
-export const LoginResponseType = new GraphQLObjectType({
-  name: "Login",
+const SigninResponseType = new GraphQLObjectType({
+  name: 'Login',
   fields: () => ({
     isSuccess: { type: GraphQLBoolean },
     message: { type: GraphQLString },
@@ -10,3 +10,5 @@ export const LoginResponseType = new GraphQLObjectType({
     avatar: { type: GraphQLString },
   }),
 });
+
+export default SigninResponseType;

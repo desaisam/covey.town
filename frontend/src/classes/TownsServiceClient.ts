@@ -34,7 +34,6 @@ export interface TownJoinResponse {
   friendlyName: string;
   /** Is this a private town? * */
   isPubliclyListed: boolean;
-
 }
 
 /**
@@ -107,7 +106,6 @@ export interface UserRegisterRequest {
   password: string;
 }
 
-// Avatar related changes. Remove after backend implementation 
 export interface SetAvatarRequest {
   email: string;
   avatar: string;
@@ -187,7 +185,7 @@ export default class TownsServiceClient {
     );
     return TownsServiceClient.unwrapOrThrowError(responseWrapper, true);
   }
- 
+
   async listTowns(): Promise<TownListResponse> {
     const responseWrapper = await this._axios.get<ResponseEnvelope<TownListResponse>>('/towns');
     return TownsServiceClient.unwrapOrThrowError(responseWrapper);
@@ -198,7 +196,7 @@ export default class TownsServiceClient {
     return TownsServiceClient.unwrapOrThrowError(responseWrapper);
   }
 
-  async handleLoginSubmit(requestData: UserLoginRequest): Promise<void> {
+  async handleLoginSubmit(requestData: UserLoginRequest): Promise<UserLoginResponse> {
     const query = `
       mutation {
         loginUser(email: "${requestData.email}", password: "${requestData.password}") {
@@ -210,10 +208,10 @@ export default class TownsServiceClient {
         }
       }
     `;
-    console.log(`Checking response after login `);
+    // console.log(`Checking response after login `);
 
     const response = await this._axios.post('/graphql', { query });
-    console.log(`Checking response after login ${response}`);
+    // console.log(`Checking response after login ${JSON.stringify(response)}`);
 
     return response.data.data.loginUser;
   }
@@ -230,8 +228,8 @@ export default class TownsServiceClient {
         }
       }
     `;
-    console.log(`Query ${query}`);
-      
+    // console.log(`Query ${query}`);
+
     const response = await this._axios.post('/graphql', { query });
     return response.data.data.registerUser;
   }
@@ -239,7 +237,7 @@ export default class TownsServiceClient {
   async setAvatarForUser(requestData: SetAvatarRequest): Promise<void> {
     const query = `
       mutation {
-        setAvatarForUser(email: "${ requestData.email }", avatar: "${ requestData.avatar }") {
+        setAvatarForUser(email: "${requestData.email}", avatar: "${requestData.avatar}") {
           isSuccess,
           email,
           avatar
@@ -247,15 +245,14 @@ export default class TownsServiceClient {
       }
     `;
 
-    const response = await this._axios.post('/graphql', { query });
-    console.log(`Response From Set Avatar ${JSON.stringify(response)}`);
-
+    await this._axios.post('/graphql', { query });
+    // console.log(`Response From Set Avatar ${JSON.stringify(response)}`);
   }
 
   async getAvatarForUser(requestData: GetAvatarRequest): Promise<GetAvatarResponse> {
     const query = `
       query {
-        getAvatarForUser(email: "${ requestData.email }") {
+        getAvatarForUser(email: "${requestData.email}") {
           isSuccess,
           email,
           avatar
@@ -265,9 +262,8 @@ export default class TownsServiceClient {
 
     const response = await this._axios.post('/graphql', { query });
 
-    console.log(`Response From Get Avatar ${JSON.stringify(response)}`);
+    // console.log(`Response From Get Avatar ${JSON.stringify(response)}`);
 
-
-    return response.data.data.getAvatarForUser.avatar;
+    return response.data.data.getAvatarForUser;
   }
 }

@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { Link, useHistory } from 'react-router-dom';
-import {
+import { useToast,  
   Flex,
   Box,
   Heading,
@@ -8,50 +8,45 @@ import {
   FormLabel,
   Input,
   Button,
-  CircularProgress,
-} from '@chakra-ui/core';
-import { useToast } from '@chakra-ui/react';
+  CircularProgress, } from '@chakra-ui/react';
 import TownsServiceClient from '../../../classes/TownsServiceClient';
-import ErrorMessage from '../ErrorMessage';
-import { useAppState } from '../../VideoCall/VideoFrontend/state';
 
-
-export default function SignIn() {
-  const {isSignedIn, setSignedIn} = useAppState();
-  const {email , setEmail, avatar, setAvatar} = useAppState();
+export default function SignUp() : JSX.Element {
+  const [name, setName] = useState('');
+  const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-  const [error, setError] = useState('');
-  const [isLoading, setIsLoading] = useState(false);
-  const history = useHistory();
-  const toast = useToast();
+  const [error] = useState('');
+  const [isLoading] = useState(false);
   const apiClient = new TownsServiceClient();
+  const toast = useToast();
+  const history = useHistory();
 
   const handleSubmit = async () => {
-    const response = await apiClient.handleLoginSubmit({ email, password });
+    // console.log(`Correctly Clicked Handle Submit Button`);
+    // console.log(`Api CLient ${apiClient}`);
+    const response = await apiClient.handleRegisterSubmit({ name, email, password });
+    // console.log(`Response back to signup ${response.isSuccess}`);
+    // console.log(`Response back to signup ${response.message}`);
+
     if (response.isSuccess === true) {
-      const myavatar = await apiClient.getAvatarForUser({email});
-      console.log(`Avatar for this user ${myavatar}`);
-      setAvatar(myavatar);
-      setSignedIn(true);
-      console.log(`Signed In ${isSignedIn}`);
-      history.replace('/');
+      history.replace('/signin');
       toast({
-        title: `Welcome ${response.name}`,
-        description: 'Welcome to your profile',
+        title: `Sign up for ${response.name} successful`,
+        description: 'Sign in to your profile',
         status: 'success',
         duration: 9000,
         isClosable: true,
       });
     } else {
-      setSignedIn(false);
-      alert('Invalid Credentials');
       toast({
-        title: 'Invalid Credentials',
-        description: 'Check the Username and the Password',
+        title: 'Sign up failed!',
+        description: 'Check the details entered',
         status: 'error',
         duration: 9000,
         isClosable: true,
       });
+      setEmail('');
+      setPassword('');
     }
   };
 
@@ -59,11 +54,24 @@ export default function SignIn() {
     <Flex width='Full' align='center' justifyContent='center'>
       <Box p={8} maxWidth='500px' borderWidth={1} borderRadius={8} boxShadow='lg'>
         <Box textAlign='center'>
-          <Heading> Sign In </Heading>
+          <Heading> Sign Up </Heading>
         </Box>
         <Box my={4} textAlign='left'>
-          <form onSubmit={(ev)=>{ev.preventDefault();handleSubmit()}}>
-            {error && <ErrorMessage />}
+          <form
+            onSubmit={ev => {
+              ev.preventDefault();
+              handleSubmit();
+            }}>
+            {error}
+            <FormControl isRequired>
+              <FormLabel> Name </FormLabel>
+              <Input
+                placeholder='Enter Name'
+                size='lg'
+                onChange={event => setName(event.currentTarget.value)}
+              />
+            </FormControl>
+            <br />
             <FormControl isRequired>
               <FormLabel> Email </FormLabel>
               <Input
@@ -86,12 +94,12 @@ export default function SignIn() {
               {isLoading ? (
                 <CircularProgress isIndeterminate size='24px' color='teal' />
               ) : (
-                'Sign In'
+                'Sign Up'
               )}
             </Button>
             <Link to='/'>
               <Button variantColor='teal' variant='outline' width='full' mt={4} type='submit'>
-                Back
+                {isLoading ? <CircularProgress isIndeterminate size='24px' color='teal' /> : 'Back'}
               </Button>
             </Link>
           </form>
@@ -99,4 +107,5 @@ export default function SignIn() {
       </Box>
     </Flex>
   );
-}
+ }
+ 

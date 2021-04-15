@@ -63,10 +63,10 @@ class CoveyGameScene extends Phaser.Scene {
       return;
     }
 
-    console.log(`Now iterating each player`);
+    // console.log(`Now iterating each player`);
 
     players.forEach((p) => {
-      console.log(`Player Name : ${p.userName} , Player Avatar : ${p.avatar}`);
+      // console.log(`Player Name : ${p.userName} , Player Avatar : ${p.avatar}`);
       
       this.updatePlayerLocation(p);
       // console.log("updating player anims");
@@ -109,7 +109,7 @@ class CoveyGameScene extends Phaser.Scene {
         }; 
       }
       myPlayer = new Player(player.id, player.userName, location,player.avatar);
-      console.log(`My Player ${myPlayer.userName}, Avatar ${myPlayer.avatar}`);
+      // console.log(`My Player ${myPlayer.userName}, Avatar ${myPlayer.avatar}`);
       
       this.players.push(myPlayer);
     }
@@ -513,7 +513,7 @@ export default function WorldMap(): JSX.Element {
     emitMovement, players, myPlayerID
   } = useCoveyAppState();
   const {
-    email,isSignedIn,avatar
+    avatar
   } = useAppState();
   const [gameScene, setGameScene] = useState<CoveyGameScene>();
   // console.log(`Getting from Global State ${avatar}`);
@@ -547,7 +547,7 @@ export default function WorldMap(): JSX.Element {
     return () => {
       game.destroy(true);
     };
-  }, [video, emitMovement, myPlayerID]);
+  }, [video, emitMovement, myPlayerID, avatar]);
 
   const deepPlayers = JSON.stringify(players);
   // console.log("Deep Playerss");

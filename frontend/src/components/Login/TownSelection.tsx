@@ -31,7 +31,7 @@ interface TownSelectionProps {
 
 export default function TownSelection({ doLogin }: TownSelectionProps): JSX.Element {
   const {avatar} = useAppState();
-  console.log(`Avatar in Video Instance : ${avatar}`);
+  // console.log(`Avatar in Video Instance : ${avatar}`);
   
   const [userName, setUserName] = useState<string>(Video.instance()?.userName || '');
   const [newTownName, setNewTownName] = useState<string>('');
@@ -91,7 +91,7 @@ export default function TownSelection({ doLogin }: TownSelectionProps): JSX.Elem
         status: 'error'
       })
     }
-  }, [doLogin, userName, connect, toast]);
+  }, [doLogin, userName, connect, toast, avatar]);
 
   const handleCreate = async () => {
     if (!userName || userName.length === 0) {

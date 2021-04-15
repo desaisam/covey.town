@@ -125,7 +125,7 @@ function appStateReducer(state: CoveyAppState, update: CoveyAppUpdate): CoveyApp
       nextState.players = update.data.players;
       break;
     case 'addPlayer':
-      console.log(`Inside Add Player Case. My update player is ${JSON.stringify(update.player)}`);
+      // console.log(`Inside Add Player Case. My update player is ${JSON.stringify(update.player)}`);
       nextState.players = nextState.players.concat([update.player]);
       break;
     case 'playerMoved':

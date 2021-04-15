@@ -14,7 +14,7 @@ export default class Player {
   /** The player's username, which is not guaranteed to be unique within the town * */
   private readonly _userName: string;
 
-  /**The players avatar */
+  /** The players avatar */
   private readonly _avatar: string;
 
 
@@ -42,6 +42,7 @@ export default class Player {
   get avatar(): string {
     return this._avatar;
   }
+
   updateLocation(location: UserLocation): void {
     this.location = location;
   }

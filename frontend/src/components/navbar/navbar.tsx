@@ -23,12 +23,12 @@ import {
   ModalBody,
   ModalCloseButton,
 } from '@chakra-ui/react';
-import { HamburgerIcon, CloseIcon, ChevronDownIcon } from '@chakra-ui/icons';
+import { HamburgerIcon, CloseIcon } from '@chakra-ui/icons';
 import { useHistory } from 'react-router-dom';
 import { useAppState } from '../VideoCall/VideoFrontend/state';
 import ChangeAvatar from './ChangeAvatarMenu';
 
-export default function NavBar() {
+export default function NavBar(): JSX.Element {
   const { isOpen, onOpen, onClose } = useDisclosure();
   const { isSignedIn, setSignedIn } = useAppState();
   const toast = useToast();
@@ -39,13 +39,13 @@ export default function NavBar() {
     setSignedIn(false);
     history.push('/');
     toast({
-        title: `Log out Successful`,
-        description: 'You have logged out Sucessfully ',
-        status: 'success',
-        duration: 4000,
-        isClosable: true,
-      });
-  }
+      title: `Log out Successful`,
+      description: 'You have logged out Sucessfully ',
+      status: 'success',
+      duration: 4000,
+      isClosable: true,
+    });
+  };
 
   return (
     <>
@@ -63,7 +63,7 @@ export default function NavBar() {
           </HStack>
           <Flex alignItems='center'>
             {!isSignedIn && (
-              <> 
+              <>
                 <Button onClick={onClickSignIn} variant='solid' colorScheme='teal' size='sm' mr={4}>
                   Log In
                 </Button>
@@ -72,36 +72,35 @@ export default function NavBar() {
                 </Button>
               </>
             )}
-            { isSignedIn && (
+            {isSignedIn && (
               <>
-              <ChangeAvatar/>         
-              <Button onClick ={onOpen} variant='solid' colorScheme='teal' size='sm' mr={4}>
+                <ChangeAvatar />
+                <Button onClick={onOpen} variant='solid' colorScheme='teal' size='sm' mr={4}>
                   Log Out
-              </Button>
-              <Modal
-                isCentered
-                onClose={onClose}
-                isOpen={isOpen}
-                motionPreset="slideInBottom"
-              >
-                <ModalOverlay />
+                </Button>
+                <Modal isCentered onClose={onClose} isOpen={isOpen} motionPreset='slideInBottom'>
+                  <ModalOverlay />
                   <ModalContent>
                     <ModalHeader>Think again...</ModalHeader>
                     <ModalCloseButton />
-                    <ModalBody>
-                      Are you sure you want to Log out ?
-                    </ModalBody>
+                    <ModalBody>Are you sure you want to Log out ?</ModalBody>
                     <ModalFooter>
-                      <Button colorScheme="blue" mr={3} onClick={onClose}>
+                      <Button colorScheme='blue' mr={3} onClick={onClose}>
                         No
                       </Button>
-                      <Button variant="ghost" onClick={(ev)=>{ev.preventDefault();onClickSignOut()}}>Yes</Button>
+                      <Button
+                        variant='ghost'
+                        onClick={ev => {
+                          ev.preventDefault();
+                          onClickSignOut();
+                        }}>
+                        Yes
+                      </Button>
                     </ModalFooter>
                   </ModalContent>
-               </Modal>
+                </Modal>
               </>
-              )
-            }
+            )}
             <Menu>
               <MenuButton as={Button} rounded='full' variant='link' cursor='pointer'>
                 <Avatar
