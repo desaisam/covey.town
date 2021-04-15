@@ -1,6 +1,6 @@
 # Covey.Town Design
 
-The following is the high level architechture, of the covey.town, which highlights the new features that have been added.
+In this release, we have added real-time persistence to the existing Covey.Town App using Postgres + GraphQL as the backend database stack. Given below is the new high level architecture of the covey.town, which highlights the new features that have been added and how these components interact with each other.
 
 ![Covey.Town Architecture](docs/covey-town-architecture.jpeg)
 
@@ -10,23 +10,29 @@ The interactions between these features have been explained below using various 
 
 ### 1. Registering as a new User
 
+The diagram below shows the detailed steps in sequential order as to how a new user would use and navigate through are new feature for signing-in to our platform and registering himself.
+
 ![Sign-up](docs/UML-signup.png)
 
 ### 2. Logging-in as an existing User
 
-![Log-in](docs/UML-signin.png)
+The diagram below shows the detailed steps in sequential order as to how an existing user who has already registered would use and navigate through are new feature for logging-in to our platform using his credentials and exploring other features such as creating or joining a room or selecting a new avatar.
+
+![Log-in](docs/UML-login.png)
 
 ### Choosing an Avatar as a logged-in User
 
+The diagram below shows the detailed steps in sequential order as to how an existing user who has already registered would use and navigate through are new feature for choosing a new avatar and using it for all subsequent logins.
+
 ![Avatar](docs/UML-avatar.png)
 
-Overall, this is how the whole authentication process will look like:
+Finally, this flowchart shows overall, how the whole authentication process will look like:
 
 ![Covey.Town Architecture](docs/UML-authentication.png)
 
 ## Changes made in the codebase:
 
-The following changes have been made in the `components` directory:
+The following changes have been made in the `components` directory from the original covey.town codebase:
 
 1. **Log-In** Related: `SignInForm.tsx [Route: /signin]` inside the `pages` directory.
 
