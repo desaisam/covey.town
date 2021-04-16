@@ -4,7 +4,7 @@ Covey.Town provides a virtual meeting space where different groups of people can
 
 Covey.Town was built for Northeastern's [Spring 2021 software engineering course](https://neu-se.github.io/CS4530-CS5500-Spring-2021/), and is designed to be reused across semesters.
 
-You can view our reference deployment of the app at [app.covey.town](https://app.covey.town/).
+You can view our reference deployment of the app at [app.covey.town](https://lucid-meitner-8f93df.netlify.app/).
 
 ![Covey.Town Architecture](docs/covey-town-architecture.jpeg)
 
@@ -52,14 +52,15 @@ Next, we need to create and setup the User Database that will store all details 
 
 2. Follow the instructions of the installer to install it in your folder.
 3. You will be prompted to create a new Password for accessing Postgres on your system, please save this password somewhere as you need this in the next step.
-4. Now open covey.town codebase in a terminal and navigate to `services/roomService/src/schemas/postgres/db.ts` file, and add your password that you saved in the above step next to password field in the json.
-5. After installation, add psql to your system path and verify it by typing `psql` in a new terminal.
-6. Once inside the Postgres terminal, create a new Database using the following command ` CREATE DATABASE user_details;`
-7. Connect to this database that we created using `\c user_details`
+4. Now open covey.town codebase in a terminal and navigate to `services/roomService/src/schemas/postgres/db.ts` file, and add your password that you saved in the    
+   above step next to password field in the json.
+6. After installation, add psql to your system path and verify it by typing `psql` in a new terminal.
+7. Once inside the Postgres terminal, create a new Database using the following command ` CREATE DATABASE user_details;`
+8. Connect to this database that we created using `\c user_details`
 
 8. Now we need to create a new table to store the user details of new users as well as existing users. Enter the following command
 
-`CREATE TABLE userdata( id SERIAL PRIMARY KEY, email TEXT, name VARCHAR(50), password TEXT, avatar VARCHAR(50) );`
+       `CREATE TABLE userdata( id SERIAL PRIMARY KEY, email TEXT, name VARCHAR(50), password TEXT, avatar VARCHAR(50) );`
 
 8. Verify a usertable has been created by firing the following query `SELECT * FROM userdata;` and you should see an empty table with columns being created.
 9. Now you're finally good to go with Database being setup and connected with our covey.town app. Any new user logging in will be entered into this database.
