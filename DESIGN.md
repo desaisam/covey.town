@@ -34,15 +34,20 @@ Finally, this flowchart shows overall, how the whole authentication process will
 
 The following changes have been made in the `components` directory from the original covey.town codebase:
 
-1. **Log-In** Related: `SignInForm.tsx [Route: /signin]` inside the `pages` directory.
+1. `App.tsx` was modified to add Routes. The app routes to different pages when the user performs Sign In and Sign Up opeations.
 
-2. **Sign-Up** (Registration) Related: `SignUpForm.tsx [Route: /signup]` inside the `pages` directory.
+2. **Log-In** Related: `SignInForm.tsx [Route: /signin]` inside the `pages` directory.This component is rendered as soon as the user clicks
+   the button 'Sign In' or when the user registers.
 
-3. The state of whether a particular users is signed in has been maintained inside the `useAppState` so that it is accessible on all the pages.
+3. **Sign-Up** (Registration) Related: `SignUpForm.tsx [Route: /signup]` inside the `pages` directory. This component is rendered when the user clicks 'Sign Up'
+   button. This component has form fields and buttons to complete User registeration.
 
-4. Added new interfaces: `UserLoginRequest`, `UserRegistrationRequest`, `SetAvatarRequest`, `UserLoginResponse`, `GetAvatarRequest`, `GetAvatarResponse`, `UserRegistrationResponse` and new service methods in `TownServiceClient.ts`
+4. The state of whether a particular users is signed in has been maintained inside the `useAppState` so that it is accessible on all the pages.
 
-5. Added new files: `AvatarModal.tsx` and `ChangeAvatarMenu.tsx` and `navbar.tsx` in the `navbar` directory.
+5. Added new interfaces: `UserLoginRequest`, `UserRegistrationRequest`, `SetAvatarRequest`, `UserLoginResponse`, `GetAvatarRequest`, `GetAvatarResponse`,  
+   `UserRegistrationResponse` and new service methods in `TownServiceClient.ts`
+
+<<<<<<< HEAD 5. Added new files: `AvatarModal.tsx` and `ChangeAvatarMenu.tsx` and `navbar.tsx` in the `navbar` directory.
 
 6. **Change Avatar**: WorldMap.tsx was alterd to read the state 'Avatar' from the global state useAppState. Existing sprite character(Misa) was hardcoded in WorldMap.tsx. This was changed to dynamically read the character from the state and player the existing animations like Walk left, Walk right etc. The Phaser atlas was also loaded with new sprite_new.json and sprite_new.png which has the information of all the new Sprite characters. Also to accomodate this change the Player object was changed to add a new field Avatar. This change is reflected in Player.ts both in service (frontend\src\classes\Player.ts) and client (services\roomService\src\types\Player.ts).
 
