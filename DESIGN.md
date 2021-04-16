@@ -47,11 +47,11 @@ The following changes have been made in the `components` directory from the orig
 5. Added new interfaces: `UserLoginRequest`, `UserRegistrationRequest`, `SetAvatarRequest`, `UserLoginResponse`, `GetAvatarRequest`, `GetAvatarResponse`,  
    `UserRegistrationResponse` and new service methods in `TownServiceClient.ts`
 
-<<<<<<< HEAD 5. Added new files: `AvatarModal.tsx` and `ChangeAvatarMenu.tsx` and `navbar.tsx` in the `navbar` directory.
+6. Added new files: `AvatarModal.tsx` and `ChangeAvatarMenu.tsx` and `navbar.tsx` in the `navbar` directory.
 
-6. **Change Avatar**: WorldMap.tsx was alterd to read the state 'Avatar' from the global state useAppState. Existing sprite character(Misa) was hardcoded in WorldMap.tsx. This was changed to dynamically read the character from the state and player the existing animations like Walk left, Walk right etc. The Phaser atlas was also loaded with new sprite_new.json and sprite_new.png which has the information of all the new Sprite characters. Also to accomodate this change the Player object was changed to add a new field Avatar. This change is reflected in Player.ts both in service (frontend\src\classes\Player.ts) and client (services\roomService\src\types\Player.ts).
+7. **Change Avatar**: WorldMap.tsx was alterd to read the state 'Avatar' from the global state useAppState. Existing sprite character(Misa) was hardcoded in WorldMap.tsx. This was changed to dynamically read the character from the state and player the existing animations like Walk left, Walk right etc. The Phaser atlas was also loaded with new sprite_new.json and sprite_new.png which has the information of all the new Sprite characters. Also to accomodate this change the Player object was changed to add a new field Avatar. This change is reflected in Player.ts both in service (frontend\src\classes\Player.ts) and client (services\roomService\src\types\Player.ts).
 
-Steps that should be taken to exercise all the new added features:
+## Steps that should be taken to exercise all the new added features:
 
 1.  On the home screen, click on the `Register` button. Upon clicking on the `Register` button, you’ll be redirected to the Sign Up page. This page will have input boxes for entering the `Name, Email and Password`.
 2.  Upon entering the credentials, click on the `Sign Up` button to create a new profile. After that, we’ll be redirected to the Sign In page, where we need to enter the newly created Email and the Password. Then we click on the `Sign In` button.
