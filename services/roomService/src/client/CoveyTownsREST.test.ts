@@ -234,31 +234,344 @@ describe('TownsServiceAPIREST', () => {
 
   describe('CoveyRegistrationAPI', () => {
     describe('CoveyRegistrationAPI', () => {
-      it('New user should be able to register with valid username, email and password', async () => {});
-      it('User should NOT be able to register with a previously registered email', async () => {});
-      it('Two users with same names but different email can register', async () => {});
+      it('New user should be able to register with valid username, email and password', async () => {
+        const query = `
+        mutation {
+          registerUser(name: "admin1", email: "admin1@domain.com", password: "admin123") {
+            isSuccess,
+            message,
+            name,
+            email,
+            avatar
+          }
+        }
+      `;
+        // Make api call here
+        const response = await apiClient.handleRegisterSubmit(query);
+        // Verify response
+        expect(response.isSuccess).toBe(true);
+        expect(response.message).toBe('Successfully registered!');
+        expect(response.name).toBe('admin1');
+        expect(response.email).toBe('admin1@domain.com');
+        expect(response.avatar).toBe('barmaid');
+      });
+      it('User should NOT be able to register with a previously registered email', async () => {
+        const query = `
+          mutation {
+            registerUser(name: "admin2", email: "admin2@domain.com", password: "admin123") {
+              isSuccess,
+              message,
+              name,
+              email,
+              avatar
+            }
+          }
+        `;
+        // Make api call here
+        const response = await apiClient.handleRegisterSubmit(query);
+        // Verify response
+        expect(response.isSuccess).toBe(true);
+        expect(response.message).toBe('Successfully registered!');
+        expect(response.name).toBe('admin2');
+        expect(response.email).toBe('admin2@domain.com');
+        expect(response.avatar).toBe('barmaid');
+
+        // Try to register a user with the same email
+        const query2 = `
+          mutation {
+            registerUser(name: "admin2", email: "admin2@domain.com", password: "admin123") {
+              isSuccess,
+              message,
+              name,
+              email,
+              avatar
+            }
+          }
+        `;
+        // Make api call here
+        const response2 = await apiClient.handleRegisterSubmit(query2);
+        // Verify response
+        expect(response2.isSuccess).toBe(false);
+        expect(response2.message).toBe(
+          'User already registered with this email. Please Login instead.',
+        );
+      });
+      it('Two users with same names but different email can register', async () => {
+        const query = `
+          mutation {
+            registerUser(name: "admin3", email: "admin3@domain.com", password: "admin123") {
+              isSuccess,
+              message,
+              name,
+              email,
+              avatar
+            }
+          }
+        `;
+        // Make api call here
+        const response = await apiClient.handleRegisterSubmit(query);
+        // Verify response
+        expect(response.isSuccess).toBe(true);
+        expect(response.message).toBe('Successfully registered!');
+        expect(response.name).toBe('admin3');
+        expect(response.email).toBe('admin3@domain.com');
+        expect(response.avatar).toBe('barmaid');
+
+        // Try to register a user with the same email
+        const query2 = `
+          mutation {
+            registerUser(name: "admin3", email: "admin4@domain.com", password: "admin123") {
+              isSuccess,
+              message,
+              name,
+              email,
+              avatar
+            }
+          }
+        `;
+        // Make api call here
+        const response2 = await apiClient.handleRegisterSubmit(query2);
+        // Verify response
+        expect(response2.isSuccess).toBe(true);
+        expect(response2.message).toBe('Successfully registered!');
+        expect(response2.name).toBe('admin3');
+        expect(response2.email).toBe('admin4@domain.com');
+        expect(response2.avatar).toBe('barmaid');
+      });
     });
 
     describe('CoveyLoginAPI', () => {
-      it('Exisiting User should be able to login with valid credentials', async () => {});
+      it('Exisiting User should be able to login with valid credentials', async () => {
+        // Login with that user
+        const query2 = `
+        mutation {
+          loginUser(email: "admin1@domain.com", password: "admin123") {
+            isSuccess,
+            message,
+            name,
+            email,
+            avatar
+          }
+        }
+      `;
 
-      it('Exisiting User should NOT be able to login with both invalid credentials', async () => {});
+        // Make api call here
+        const response2 = await apiClient.handleLoginSubmit(query2);
+        // Verify response
+        expect(response2.isSuccess).toBe(true);
+        expect(response2.message).toBe('Successfully logged-in!');
+        expect(response2.name).toBe('admin1');
+        expect(response2.email).toBe('admin1@domain.com');
+      });
 
-      it('Exisiting User should NOT be able to login with invalid username, but valid password', async () => {});
+      it('Exisiting User should NOT be able to login with both invalid credentials', async () => {
+        // Login an existing user created above with invalid credentials
+        const query2 = `
+        mutation {
+          loginUser(email: "wrongAdmin@domain.com", password: "wrongAdmin123") {
+            isSuccess,
+            message,
+            name,
+            email,
+            avatar
+          }
+        }
+      `;
 
-      it('Exisiting User should NOT be able to login with valid username, invalid password', async () => {});
+        // Make api call here
+        const response2 = await apiClient.handleLoginSubmit(query2);
+        // Verify response
+        expect(response2.isSuccess).toBe(false);
+        expect(response2.message).toBe('User cannot be logged in. Please verify your credentials.');
+      });
 
-      it('New User should NOT be able to login without registering', async () => {});
+      it('Exisiting User should NOT be able to login with invalid username, but valid password', async () => {
+        // Login with that user
+        const query2 = `
+        mutation {
+          loginUser(email: "wrongAdmin@domain.com", password: "admin123") {
+            isSuccess,
+            message,
+            name,
+            email,
+            avatar
+          }
+        }
+      `;
+
+        // Make api call here
+        const response2 = await apiClient.handleLoginSubmit(query2);
+        // Verify response
+        expect(response2.isSuccess).toBe(false);
+        expect(response2.message).toBe('User cannot be logged in. Please verify your credentials.');
+      });
+
+      it('Exisiting User should NOT be able to login with valid username, invalid password', async () => {
+        // Login with that user
+        const query2 = `
+        mutation {
+          loginUser(email: "admin@domain.com", password: "wrongAdmin123") {
+            isSuccess,
+            message,
+            name,
+            email,
+            avatar
+          }
+        }
+      `;
+
+        // Make api call here
+        const response2 = await apiClient.handleLoginSubmit(query2);
+        // Verify response
+        expect(response2.isSuccess).toBe(false);
+        expect(response2.message).toBe('User cannot be logged in. Please verify your credentials.');
+      });
+
+      it('New User should NOT be able to login without registering', async () => {
+        // Login with a user that does not exist
+        const query2 = `
+        mutation {
+          loginUser(email: "wrongAdmin@domain.com", password: "wrongAdmin123") {
+            isSuccess,
+            message,
+            name,
+            email,
+            avatar
+          }
+        }
+      `;
+
+        // Make api call here
+        const response2 = await apiClient.handleLoginSubmit(query2);
+        // Verify response
+        expect(response2.isSuccess).toBe(false);
+        expect(response2.message).toBe('User cannot be logged in. Please verify your credentials.');
+      });
     });
 
     describe('SetAvatarAPI', () => {
-      it('User should be able to set or change his/her new avatar', async () => {});
-      it('User should NOT be able to set an avatar without registering first', async () => {});
+      it('User should be able to set or change his/her new avatar', async () => {
+        // Register a new User
+        const query = `
+        mutation {
+          registerUser(name: "admin5", email: "admin5@domain.com", password: "admin123") {
+            isSuccess,
+            message,
+            name,
+            email,
+            avatar
+          }
+        }
+      `;
+        // Make api call here
+        const response = await apiClient.handleRegisterSubmit(query);
+        // Verify response
+        expect(response.isSuccess).toBe(true);
+        expect(response.message).toBe('Successfully registered!');
+        expect(response.name).toBe('admin5');
+        expect(response.email).toBe('admin5@domain.com');
+        expect(response.avatar).toBe('barmaid');
+
+        // Change the avatar
+        const query2 = `
+        mutation {
+          setAvatarForUser(email: "admin5@domain.com", avatar: "granny") {
+            isSuccess,
+            email,
+            avatar
+          }
+        }
+      `;
+        // Make api call here
+        const response2 = await apiClient.setAvatarForUser(query2);
+        expect(response2.isSuccess).toBe(true);
+        expect(response2.avatar).toBe('granny');
+      });
+      it('User should NOT be able to set an avatar without registering first', async () => {
+        // Change the avatar without registering
+        const query2 = `
+        mutation {
+          setAvatarForUser(email: "admin7@domain7.com", avatar: "granny") {
+            isSuccess,
+            email,
+            avatar
+          }
+        }
+      `;
+        // Make api call here
+        const response2 = await apiClient.setAvatarForUser(query2);
+        expect(response2.isSuccess).toBe(false);
+      });
     });
 
     describe('GetAvatarAPI', () => {
-      it('User should be able to retrieve the newly set avatar from the database', async () => {});
-      it('New User should NOT be able to retrieve avatar without registering first', async () => {});
+      it('User should be able to retrieve the newly set avatar from the database', async () => {
+        // Register a new User
+        const query = `
+        mutation {
+          registerUser(name: "admin6", email: "admin6@domain.com", password: "admin123") {
+            isSuccess,
+            message,
+            name,
+            email,
+            avatar
+          }
+        }
+      `;
+        // Make api call here
+        const response = await apiClient.handleRegisterSubmit(query);
+        // Verify response
+        expect(response.isSuccess).toBe(true);
+        expect(response.message).toBe('Successfully registered!');
+        expect(response.name).toBe('admin6');
+        expect(response.email).toBe('admin6@domain.com');
+        expect(response.avatar).toBe('barmaid');
+
+        // Change the avatar
+        const query2 = `
+        mutation {
+          setAvatarForUser(email: "admin6@domain.com", avatar: "granny") {
+            isSuccess,
+            email,
+            avatar
+          }
+        }
+      `;
+        // Make api call here
+        const response2 = await apiClient.setAvatarForUser(query2);
+        expect(response2.isSuccess).toBe(true);
+        expect(response2.avatar).toBe('granny');
+
+        // Get the new Avatar
+        const query3 = `
+        query {
+          getAvatarForUser(email: "admin6@domain.com") {
+            isSuccess,
+            email,
+            avatar
+          }
+        }
+      `;
+        // Make api call here
+        const response3 = await apiClient.getAvatarForUser(query3);
+        expect(response3.isSuccess).toBe(true);
+        expect(response3.avatar).toBe('granny');
+      });
+      it('New User should NOT be able to retrieve avatar without registering first', async () => {
+        // Get the new Avatar
+        const query3 = `
+        query {
+          getAvatarForUser(email: "newUser@domain.com") {
+            isSuccess,
+            email,
+            avatar
+          }
+        }
+      `;
+        // Make api call here
+        const response3 = await apiClient.getAvatarForUser(query3);
+        expect(response3.isSuccess).toBe(false);
+      });
     });
   });
 });
