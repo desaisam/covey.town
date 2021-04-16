@@ -1,4 +1,3 @@
-/* eslint no-console: ["error", { allow: ["log"] }] */
 import { GraphQLObjectType, GraphQLSchema, GraphQLString } from 'graphql';
 import pool from './postgres/db';
 import GetAvatarForUserResponse from './typedefs/GetAvatarForUserResponse';
@@ -14,11 +13,9 @@ export interface GetUserResponse {
 }
 
 async function getUserFromEmail(email: string): Promise<GetUserResponse> {
-  console.log(`${email}: getting user from email`);
   const response = await pool.query('SELECT * FROM userdata');
   const data = response.rows;
   const registerdUser = data.find((user: GetUserResponse) => user.email === email);
-  console.log(`${email}: found user with given email`);
   return registerdUser;
 }
 
@@ -31,14 +28,12 @@ const RootQuery = new GraphQLObjectType({
         email: { type: GraphQLString },
       },
       async resolve(_, args) {
-        console.log(`${args.email}: received get avatar request`);
         try {
           if (args.email) {
             const user = await getUserFromEmail(args.email);
             if (user) {
               // user found
               const { avatar } = user;
-              console.log(`${args.email}: Found ${avatar} for get avatar request`);
               if (avatar) {
                 return {
                   isSuccess: true,
@@ -47,7 +42,6 @@ const RootQuery = new GraphQLObjectType({
                 };
               }
             } else {
-              console.log(`${args.email}: no user for get avatar request`);
               // no user with matching email found
               return {
                 isSuccess: false,
@@ -58,7 +52,7 @@ const RootQuery = new GraphQLObjectType({
             isSuccess: false,
           };
         } catch (e) {
-          console.log(`${args.email}: Error in getting avatar for user. ${e}`);
+          // console.log(`${args.email}: Error in getting avatar for user. ${e}`);
           return {
             isSuccess: false,
           };
@@ -69,11 +63,9 @@ const RootQuery = new GraphQLObjectType({
 });
 
 async function checkIfUserAlreadyExists(email: string): Promise<boolean> {
-  console.log(`${email}: checking if user exists`);
   const response = await pool.query('SELECT * FROM userdata');
   const data = response.rows;
   const userFound = data.find((user: GetUserResponse) => user.email === email);
-  console.log(`${email}: checking if user exists, user found: ${userFound}`);
   if (userFound) {
     return true;
   }
@@ -81,7 +73,6 @@ async function checkIfUserAlreadyExists(email: string): Promise<boolean> {
 }
 
 async function getExistingUser(email: string, password: string): Promise<GetUserResponse> {
-  console.log(`${email}: getting existing user`);
   const response = await pool.query('SELECT * FROM userdata');
   const data = response.rows;
   const existingUser = data.find(
@@ -102,24 +93,21 @@ const Mutation = new GraphQLObjectType({
       },
       async resolve(_, args) {
         try {
-          console.log(`${args.email}: received register request`);
           // First check if user already registered
           const userExists = await checkIfUserAlreadyExists(args.email);
           if (userExists) {
-            console.log(`${args.email}: user exists for register request`);
             return {
               isSuccess: false,
               message: 'User already registered with this email. Please Login instead.',
             };
           }
 
-          console.log(`${args.email}: adding to db for register request`);
           // Put this data in args to database
           await pool.query(
             'INSERT INTO userdata (email, name, password, avatar) VALUES ($1, $2, $3, $4)',
             [args.email, args.name, args.password, 'barmaid'],
           );
-          console.log(`${args.email}: added to db, returning for register request`);
+
           return {
             isSuccess: true,
             message: 'Successfully registered!',
@@ -129,7 +117,7 @@ const Mutation = new GraphQLObjectType({
           };
         } catch (e) {
           // Log error and return 'false' isSuccess with error message
-          console.log(`Error in adding user: ${args.email} to database. ${e}`);
+          // console.log(`Error in adding user: ${args.email} to database. ${e}`);
           return {
             isSuccess: false,
             message: 'Something went wrong. Please try again :(',
@@ -146,17 +134,14 @@ const Mutation = new GraphQLObjectType({
       async resolve(_, args) {
         try {
           // First check if user registered or not
-          console.log(`${args.email}: received login request`);
           const user = await getExistingUser(args.email, args.password);
           if (user === undefined) {
-            console.log(`${args.email}: user not exists for login request`);
             return {
               isSuccess: false,
               message: 'User cannot be logged in. Please verify your credentials.',
             };
           }
 
-          console.log(`${args.email}: returning for login request`);
           return {
             isSuccess: true,
             message: 'Successfully logged-in!',
@@ -165,7 +150,7 @@ const Mutation = new GraphQLObjectType({
           };
         } catch (e) {
           // Log error and return 'false' isSuccess with error message
-          console.log(`Error in checking existing user: ${args.email} in database. ${e}`);
+          // console.log(`Error in checking existing user: ${args.email} in database. ${e}`);
           return {
             isSuccess: false,
             message: 'Something went wrong. Please try again :(',
