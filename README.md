@@ -44,30 +44,28 @@ To create an account and configure your local environment:
 
 | `TWILIO_API_AUTH_TOKEN` | Visible on your twilio account dashboard. |
 
-### Setting up the backend : PostGres
+### Setting up the backend : PostgreSQL database
 
-Next, we need to create and setup the User Database that will store all details about new users that would log in. Since we are using Postgres as our Database Client, following the steps shown below to download and setup Postgres on your system.
+Next, we need to create and setup the database that will store all the details about new users that registers on covey.town. We are using PostgreSQL as our database, follow the steps shown below to download and setup PostgreSQL on your system:
 
-1. Install Postgres from https://www.postgresql.org/download/
-
+1. Install PostgreSQL from https://www.postgresql.org/download/.
 2. Follow the instructions of the installer to install it in your folder.
 3. You will be prompted to create a new Password for accessing Postgres on your system, please save this password somewhere as you need this in the next step.
-4. Now open covey.town codebase in a terminal and navigate to `services/roomService/src/schemas/postgres/db.ts` file, and add your password that you saved in the  
-   above step next to password field in the json.
+4. Now open covey.town codebase and navigate to `services/roomService/src/schemas/postgres/db.ts` file, and add your password that you saved in the above step next to password field in the json.
 5. After installation, add psql to your system path and verify it by typing `psql` in a new terminal.
-6. Once inside the Postgres terminal, create a new Database using the following command ` CREATE DATABASE user_details;`
+6. Once inside the PostgreSQL terminal, create a new database using the following command `CREATE DATABASE user_details;`
 7. Connect to this database that we created using `\c user_details`
 
-8. Now we need to create a new table to store the user details of new users as well as existing users. Enter the following command
+8. Now we need to create a new table to store the user details of new users as well as existing users. Enter the following command:
 
    `CREATE TABLE userdata( id SERIAL PRIMARY KEY, email TEXT, name VARCHAR(50), password TEXT, avatar VARCHAR(50) );`
 
 9. Verify a usertable has been created by firing the following query `SELECT * FROM userdata;` and you should see an empty table with columns being created.
-10. Now you're finally good to go with Database being setup and connected with our covey.town app. Any new user logging in will be entered into this database.
+10. Now you're finally good to go with database being setup and connected with our covey.town app. Any new user logging in will be entered into this database.
 
-### Setting up the backend : GraphQL
+### Setting up the backend : [GraphQL](https://www.npmjs.com/package/graphql) and [pg](https://www.npmjs.com/package/pg)
 
-There is no real set required for running GraphQL, just installing the required libraries. To do this, run `npm install` in the `services/roomService` directory and all required dependencies will be downloaded including GraphQL.
+There is no such setup required to install and get running with GraphQL. To do this, run `npm install` in the `services/roomService` directory and all required libraries (including pg) will be downloaded.
 
 ### Starting the backend
 
