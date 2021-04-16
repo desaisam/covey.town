@@ -235,30 +235,11 @@ describe('TownsServiceAPIREST', () => {
   describe('CoveyRegistrationAPI', () => {
     describe('CoveyRegistrationAPI', () => {
       it('New user should be able to register with valid username, email and password', async () => {
-        const query = `
-        mutation {
-          registerUser(name: "admin1", email: "admin1@domain.com", password: "admin123") {
-            isSuccess,
-            message,
-            name,
-            email,
-            avatar
-          }
-        }
-      `;
-        // Make api call here
-        const response = await apiClient.handleRegisterSubmit(query);
-        // Verify response
-        expect(response.isSuccess).toBe(true);
-        expect(response.message).toBe('Successfully registered!');
-        expect(response.name).toBe('admin1');
-        expect(response.email).toBe('admin1@domain.com');
-        expect(response.avatar).toBe('barmaid');
-      });
-      it('User should NOT be able to register with a previously registered email', async () => {
+        const rand = nanoid();
+        const email = `${rand}@domain.com`;
         const query = `
           mutation {
-            registerUser(name: "admin2", email: "admin2@domain.com", password: "admin123") {
+            registerUser(name: "admin1", email: "${email}", password: "admin123") {
               isSuccess,
               message,
               name,
@@ -272,14 +253,37 @@ describe('TownsServiceAPIREST', () => {
         // Verify response
         expect(response.isSuccess).toBe(true);
         expect(response.message).toBe('Successfully registered!');
-        expect(response.name).toBe('admin2');
-        expect(response.email).toBe('admin2@domain.com');
+        expect(response.name).toBe('admin1');
+        expect(response.email).toBe(email);
+        expect(response.avatar).toBe('barmaid');
+      });
+      it('User should NOT be able to register with a previously registered email', async () => {
+        const rand = nanoid();
+        const email = `${rand}@domain.com`;
+        const query = `
+          mutation {
+            registerUser(name: "admin1", email: "${email}", password: "admin123") {
+              isSuccess,
+              message,
+              name,
+              email,
+              avatar
+            }
+          }
+        `;
+        // Make api call here
+        const response = await apiClient.handleRegisterSubmit(query);
+        // Verify response
+        expect(response.isSuccess).toBe(true);
+        expect(response.message).toBe('Successfully registered!');
+        expect(response.name).toBe('admin1');
+        expect(response.email).toBe(email);
         expect(response.avatar).toBe('barmaid');
 
         // Try to register a user with the same email
         const query2 = `
           mutation {
-            registerUser(name: "admin2", email: "admin2@domain.com", password: "admin123") {
+            registerUser(name: "admin1", email: "${email}", password: "admin123") {
               isSuccess,
               message,
               name,
@@ -297,9 +301,11 @@ describe('TownsServiceAPIREST', () => {
         );
       });
       it('Two users with same names but different email can register', async () => {
+        const rand = nanoid();
+        const email = `${rand}@domain.com`;
         const query = `
           mutation {
-            registerUser(name: "admin3", email: "admin3@domain.com", password: "admin123") {
+            registerUser(name: "admin1", email: "${email}", password: "admin123") {
               isSuccess,
               message,
               name,
@@ -313,14 +319,15 @@ describe('TownsServiceAPIREST', () => {
         // Verify response
         expect(response.isSuccess).toBe(true);
         expect(response.message).toBe('Successfully registered!');
-        expect(response.name).toBe('admin3');
-        expect(response.email).toBe('admin3@domain.com');
+        expect(response.name).toBe('admin1');
+        expect(response.email).toBe(email);
         expect(response.avatar).toBe('barmaid');
 
-        // Try to register a user with the same email
+        const rand2 = nanoid();
+        const email2 = `${rand2}@domain.com`;
         const query2 = `
           mutation {
-            registerUser(name: "admin3", email: "admin4@domain.com", password: "admin123") {
+            registerUser(name: "admin1", email: "${email2}", password: "admin123") {
               isSuccess,
               message,
               name,
@@ -334,18 +341,41 @@ describe('TownsServiceAPIREST', () => {
         // Verify response
         expect(response2.isSuccess).toBe(true);
         expect(response2.message).toBe('Successfully registered!');
-        expect(response2.name).toBe('admin3');
-        expect(response2.email).toBe('admin4@domain.com');
+        expect(response2.name).toBe('admin1');
+        expect(response2.email).toBe(email2);
         expect(response2.avatar).toBe('barmaid');
       });
     });
 
     describe('CoveyLoginAPI', () => {
       it('Exisiting User should be able to login with valid credentials', async () => {
+        // Register a user
+        const rand = nanoid();
+        const email = `${rand}@domain.com`;
+        const query = `
+          mutation {
+            registerUser(name: "admin1", email: "${email}", password: "admin123") {
+              isSuccess,
+              message,
+              name,
+              email,
+              avatar
+            }
+          }
+        `;
+        // Make api call here
+        const response = await apiClient.handleRegisterSubmit(query);
+        // Verify response
+        expect(response.isSuccess).toBe(true);
+        expect(response.message).toBe('Successfully registered!');
+        expect(response.name).toBe('admin1');
+        expect(response.email).toBe(email);
+        expect(response.avatar).toBe('barmaid');
+
         // Login with that user
         const query2 = `
         mutation {
-          loginUser(email: "admin1@domain.com", password: "admin123") {
+          loginUser(email: "${email}", password: "admin123") {
             isSuccess,
             message,
             name,
@@ -361,14 +391,37 @@ describe('TownsServiceAPIREST', () => {
         expect(response2.isSuccess).toBe(true);
         expect(response2.message).toBe('Successfully logged-in!');
         expect(response2.name).toBe('admin1');
-        expect(response2.email).toBe('admin1@domain.com');
+        expect(response2.email).toBe(email);
       });
 
       it('Exisiting User should NOT be able to login with both invalid credentials', async () => {
+        // Register a user
+        const rand = nanoid();
+        const email = `${rand}@domain.com`;
+        const query = `
+          mutation {
+            registerUser(name: "admin1", email: "${email}", password: "admin123") {
+              isSuccess,
+              message,
+              name,
+              email,
+              avatar
+            }
+          }
+        `;
+        // Make api call here
+        const response = await apiClient.handleRegisterSubmit(query);
+        // Verify response
+        expect(response.isSuccess).toBe(true);
+        expect(response.message).toBe('Successfully registered!');
+        expect(response.name).toBe('admin1');
+        expect(response.email).toBe(email);
+        expect(response.avatar).toBe('barmaid');
+
         // Login an existing user created above with invalid credentials
         const query2 = `
         mutation {
-          loginUser(email: "wrongAdmin@domain.com", password: "wrongAdmin123") {
+          loginUser(email: "${email}", password: "wrongAdmin123") {
             isSuccess,
             message,
             name,
@@ -386,6 +439,29 @@ describe('TownsServiceAPIREST', () => {
       });
 
       it('Exisiting User should NOT be able to login with invalid username, but valid password', async () => {
+        // Register a user
+        const rand = nanoid();
+        const email = `${rand}@domain.com`;
+        const query = `
+          mutation {
+            registerUser(name: "admin1", email: "${email}", password: "admin123") {
+              isSuccess,
+              message,
+              name,
+              email,
+              avatar
+            }
+          }
+        `;
+        // Make api call here
+        const response = await apiClient.handleRegisterSubmit(query);
+        // Verify response
+        expect(response.isSuccess).toBe(true);
+        expect(response.message).toBe('Successfully registered!');
+        expect(response.name).toBe('admin1');
+        expect(response.email).toBe(email);
+        expect(response.avatar).toBe('barmaid');
+
         // Login with that user
         const query2 = `
         mutation {
@@ -407,10 +483,33 @@ describe('TownsServiceAPIREST', () => {
       });
 
       it('Exisiting User should NOT be able to login with valid username, invalid password', async () => {
+        // Register a user
+        const rand = nanoid();
+        const email = `${rand}@domain.com`;
+        const query = `
+          mutation {
+            registerUser(name: "admin1", email: "${email}", password: "admin123") {
+              isSuccess,
+              message,
+              name,
+              email,
+              avatar
+            }
+          }
+        `;
+        // Make api call here
+        const response = await apiClient.handleRegisterSubmit(query);
+        // Verify response
+        expect(response.isSuccess).toBe(true);
+        expect(response.message).toBe('Successfully registered!');
+        expect(response.name).toBe('admin1');
+        expect(response.email).toBe(email);
+        expect(response.avatar).toBe('barmaid');
+
         // Login with that user
         const query2 = `
         mutation {
-          loginUser(email: "admin@domain.com", password: "wrongAdmin123") {
+          loginUser(email: "${email}", password: "wrongAdmin123") {
             isSuccess,
             message,
             name,
@@ -431,7 +530,7 @@ describe('TownsServiceAPIREST', () => {
         // Login with a user that does not exist
         const query2 = `
         mutation {
-          loginUser(email: "wrongAdmin@domain.com", password: "wrongAdmin123") {
+          loginUser(email: "newAdmin@domain.com", password: "newAdmin123") {
             isSuccess,
             message,
             name,
@@ -452,30 +551,32 @@ describe('TownsServiceAPIREST', () => {
     describe('SetAvatarAPI', () => {
       it('User should be able to set or change his/her new avatar', async () => {
         // Register a new User
+        const rand = nanoid();
+        const email = `${rand}@domain.com`;
         const query = `
-        mutation {
-          registerUser(name: "admin5", email: "admin5@domain.com", password: "admin123") {
-            isSuccess,
-            message,
-            name,
-            email,
-            avatar
+          mutation {
+            registerUser(name: "admin1", email: "${email}", password: "admin123") {
+              isSuccess,
+              message,
+              name,
+              email,
+              avatar
+            }
           }
-        }
-      `;
+        `;
         // Make api call here
         const response = await apiClient.handleRegisterSubmit(query);
         // Verify response
         expect(response.isSuccess).toBe(true);
         expect(response.message).toBe('Successfully registered!');
-        expect(response.name).toBe('admin5');
-        expect(response.email).toBe('admin5@domain.com');
+        expect(response.name).toBe('admin1');
+        expect(response.email).toBe(email);
         expect(response.avatar).toBe('barmaid');
 
         // Change the avatar
         const query2 = `
         mutation {
-          setAvatarForUser(email: "admin5@domain.com", avatar: "granny") {
+          setAvatarForUser(email: "${email}", avatar: "granny") {
             isSuccess,
             email,
             avatar
@@ -506,31 +607,32 @@ describe('TownsServiceAPIREST', () => {
 
     describe('GetAvatarAPI', () => {
       it('User should be able to retrieve the newly set avatar from the database', async () => {
-        // Register a new User
+        const rand = nanoid();
+        const email = `${rand}@domain.com`;
         const query = `
-        mutation {
-          registerUser(name: "admin6", email: "admin6@domain.com", password: "admin123") {
-            isSuccess,
-            message,
-            name,
-            email,
-            avatar
+          mutation {
+            registerUser(name: "admin1", email: "${email}", password: "admin123") {
+              isSuccess,
+              message,
+              name,
+              email,
+              avatar
+            }
           }
-        }
-      `;
+        `;
         // Make api call here
         const response = await apiClient.handleRegisterSubmit(query);
         // Verify response
         expect(response.isSuccess).toBe(true);
         expect(response.message).toBe('Successfully registered!');
-        expect(response.name).toBe('admin6');
-        expect(response.email).toBe('admin6@domain.com');
+        expect(response.name).toBe('admin1');
+        expect(response.email).toBe(email);
         expect(response.avatar).toBe('barmaid');
 
         // Change the avatar
         const query2 = `
         mutation {
-          setAvatarForUser(email: "admin6@domain.com", avatar: "granny") {
+          setAvatarForUser(email: "${email}", avatar: "granny") {
             isSuccess,
             email,
             avatar
@@ -545,7 +647,7 @@ describe('TownsServiceAPIREST', () => {
         // Get the new Avatar
         const query3 = `
         query {
-          getAvatarForUser(email: "admin6@domain.com") {
+          getAvatarForUser(email: "${email}") {
             isSuccess,
             email,
             avatar
@@ -561,7 +663,7 @@ describe('TownsServiceAPIREST', () => {
         // Get the new Avatar
         const query3 = `
         query {
-          getAvatarForUser(email: "newUser@domain.com") {
+          getAvatarForUser(email: "newUser123@domain.com") {
             isSuccess,
             email,
             avatar
