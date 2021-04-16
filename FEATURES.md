@@ -30,3 +30,12 @@ As an already existing user who has previously registered on the platform, he/sh
 
 - Users is able to easily locate the functionality to choose an Avatar.
 - The Avatar the user chose is persisted and associated with his entry in the database, so that it is already chosen the next time the user logs in.
+
+## Steps that should be taken to exercise all the new added features:
+
+1.  On the home screen, click on the `Register` button. Upon clicking on the `Register` button, you’ll be redirected to the Sign Up page. This page will have input boxes for entering the `Name, Email and Password`.
+2.  Upon entering the credentials, click on the `Sign Up` button to create a new profile. After that, we’ll be redirected to the Sign In page, where we need to enter the newly created Email and the Password. Then we click on the `Sign In` button.
+3.  Then you need to click on the Sign In button upon which you will be redirected to the Home page, where you can choose a new Avatar by clicking the `Choose Avatar` button on the top right corner.
+4.  The `Choose Avatar` button hosts multiple avatars with their pictures and the user can click on any of the avatar to use it. The newly selected avatar will then be reflected in the top right corner of the screen as an image.
+
+Note: After every successful or unsuccessful action of the user, we have provided a toast which will notify the user of what just happened.
